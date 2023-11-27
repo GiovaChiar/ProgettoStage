@@ -3,17 +3,18 @@ import { CommonModule } from '@angular/common';
 import { InputTileComponent } from "../../utils/input-tile/input-tile.component";
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthenticationService } from '../../../services/authentication.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
     selector: 'app-login',
     standalone: true,
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss',
-    imports: [CommonModule, InputTileComponent, RouterOutlet, RouterLink, RouterLinkActive]
+    imports: [CommonModule, InputTileComponent, RouterOutlet, RouterLink, RouterLinkActive, HttpClientModule],
+    providers: [AuthenticationService]
 })
 export class LoginComponent{
-  id = 'username'
+  id = 'email'
   pw = 'password'
   constructor(private autService: AuthenticationService){
     

@@ -6,13 +6,14 @@ import { RegistrationComponent } from './components/pages/registration/registrat
 import { HomepageComponent } from './components/pages/homepage/homepage.component';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
     selector: 'app-root',
     standalone: true,
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    imports: [CommonModule, RouterOutlet, LoginComponent, RegistrationComponent, HomepageComponent, NgbModule]
+    imports: [CommonModule, RouterOutlet, LoginComponent, RegistrationComponent, HomepageComponent, NgbModule, HttpClientModule]
 })
 export class AppComponent {
   title = 'progettoFormazione';

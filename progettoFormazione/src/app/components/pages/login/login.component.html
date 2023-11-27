@@ -7,7 +7,7 @@
         <div class="col-lg-3 vh-100 align-items-md">
             <app-input-tile  [title]="id" [type]="id" (inputEmitter)="handleUsernameEmitted($event)"></app-input-tile>
             <app-input-tile  [title]="pw" [type]="pw" (inputEmitter)="handlePasswordEmitted($event)"></app-input-tile>
-            <button type="button" routerLink="/homepage">Login</button>
+            <button type="button" (click)="loginRequest()" routerLink="/homepage">Login</button>
             <button type="button" routerLink="/registration-page">Register</button>
         </div>  
       </div>
