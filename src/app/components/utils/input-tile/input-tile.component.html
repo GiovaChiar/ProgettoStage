@@ -1,5 +1,5 @@
 <!DOCTYPE html>
 <div class={{type}}>
     <label class="form-label">{{title | titlecase}}</label>
-    <input class="form-control" type={{type}} (input)="onInput($event)" (change)="emitInput()">
+    <input class="form-control" type={{title}} (input)="onInput($event)" (change)="emitInput()">
 </div>

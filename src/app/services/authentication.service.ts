@@ -13,7 +13,10 @@ export class AuthenticationService {
   }
   constructor(private http: HttpClient) { }
   setUsername(value: string){
-    this.user.email = value
+    if(value.toLocaleLowerCase().match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}'))
+      this.user.email = value
+    else
+      console.log('non è una mail')
   }
   setPassword(value: string){
     this.user.passsword = value
