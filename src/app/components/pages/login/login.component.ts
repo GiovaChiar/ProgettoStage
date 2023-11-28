@@ -15,7 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
     providers: [HttpClientModule, AuthenticationService]
 })
 export class LoginComponent{
-  id = 'username'
+  id = 'email'
   pw = 'password'
   constructor(private autService: AuthenticationService){
     

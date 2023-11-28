@@ -8,22 +8,22 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class AuthenticationService {
   private user = {
-    username: '',
+    email: '',
     passsword: '',
   }
   constructor(private http: HttpClient) { }
   setUsername(value: string){
-    this.user.username = value
+    this.user.email = value
   }
   setPassword(value: string){
     this.user.passsword = value
   }
   tryLogin(){
-    if(this.user.username === '' && this.user.passsword === ''){
+    if(this.user.email === '' && this.user.passsword === ''){
       console.log("missing both");
     }else if(this.user.passsword === ''){
       console.log("missing password");
-    }else if(this.user.username === ''){
+    }else if(this.user.email === ''){
       console.log("missing username");
     }else{
       this.http.post('http://localhost:4000',this.user)
