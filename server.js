@@ -1,97 +1,61 @@
+'use strict'
 if (process.env.NODE_ENV!== "production"){
     require("dotenv").config()
 }
-
 const express= require("express")
 const app= express()
-const bcrypt= require("bcrypt")
-const passport= require("passport")
-const initializePasspoort= require("./passport-config")
 const flash= require("express-flash")
 const session= require("express-session")
-const bodyParser= require("body-parser")
-const methodOvveride= require("method-override")
+const executeQuery= require("C:/Users/pmateria/Desktop/ProgettoStage/moduls/db.js")
+const middleware= require("C:/Users/pmateria/Desktop/ProgettoStage/moduls/middleware.js")
+const cors= require('cors')
 
-initializePasspoort(
-    passport,
-    email=> users.find(user=>user.email=== email),
-    id => user.find(user=>user.id=== id)
-)
+app.use(express.json())   // uso di json
+app.use(express.urlencoded({extended: true}))
 
-const users= []
+// Post registrazione utente in tabella utenti. Il json richiede come paramtri Username,Email,Password,Nome,Cognome li acquisisce e li invia al database 
+app.post("/registrazione", async function (req, res, next){
+    const Username= req.body.Username
+    const Email= req.body.Email
+    const Password= req.body.Password
+    const Cognome= req.body.Cognome
+    const Nome= req.body.Nome
+    const rows = await executeQuery("SELECT * from utenti");
+    if(res.length>0){
+        res.send("La mail inserita è esistente!");
+    }else {
+        executeQuery(`INSERT into utenti(Username,Email,Password,Cognome,Nome) values('${Username}','${Email}','${Password}','${Cognome}','${Nome}')`,function(er,res){
+        res.send("Utente registrato con successo")
+    });
+    console.log(rows)
+    }})
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(flash())
-app.use(session({
-    name : 'codeil',
-    secret : 'something',
-    resave :true,
-    saveUninitialized: true,
-    cookie : {
-    maxAge:(1000 * 60 * 100)
-    }      
-}));
-
-app.use(passport.initialize())
-app.use(methodOvveride("_method"))
-app.post("login", checkNotAuthenticated , passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true
-}))
-
-app.post("/register",checkNotAuthenticated, async(req,res)=>{
-     try{
-        const hashedPassword= await hash(RegisterUserDto)
-            users.push({
-            id: Date.now().toString(), 
-            name: RegisterUserDto.name,
-            email: RegisterUserDto.email,
-            password:hashedPassword,
-        })
-        console.log(users); 
-        res.redirect("/login ")
-
-     }catch {
-        res.redirect("/register")
-     }
-     console.log(users);
-})
-
-app.delete("/logout", (res, req)=>{
-    req.logOut(req.user,err=> {
-        if(err) return next(err)
-        res.redirect("/")
+    //Delete di un user con identificativo id per la rimozione del record 
+    app.get('/user/delete/:id', function(req,res,next){
+        var id= req.body.id
+        var query= `DELETE FROM utenti WHERE id = "${id}"`
+        executeQuery(query,function(error,data){
+            if(error){
+                throw err;
+            }else{
+                response.redirect("/login");
+            }
+        });
     })
-    res.redirect("/login")
+
+// Post login utente in tabella utenti. Il json richiede come paramtri Username,Email,Password li acquisisce e li invia al database tramite query Insert 
+app.post("/login", function(request,result, next){
+        const username= request.body.username
+        const email= request.body.Email
+        const password= request.body.password
+        const rows = executeQuery("SELECT * from login");
+        if(result.length > 0){
+             result.send("La mail inserita esiste");
+        }  else {
+                executeQuery(`INSERT into login(username,Email,password) values('${username}','${email}','${password}')`,function(er,res){
+                res.send("Accesso effettuato")
+    });
+    console.log(rows)
+}
 })
-
-
-//Routes
-app.get('/',checkAuthenticated, async (req, res) => {
-    res.render("index.ejs")
-});
- 
-app.get('/login',checkNotAuthenticated, async (req, res) => {
-    res.render("login.ejs")
-});
-
-app.get('/register',checkNotAuthenticated, async (req, res) => {
-    res.render("register.ejs")
-});
-
-function checkAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next()
-    }
-    res.redirect('/login')
-  }
-
-function checkNotAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-      return res.redirect('/')
-    }
-    next()
-  }
-
-app.listen(3000);
+app.listen(23456);
