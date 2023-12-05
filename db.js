@@ -5,8 +5,8 @@ var pool =
   mariadb.createPool({
     host:"localhost", 
     user:"root", 
-    password: "root",
-    database:"libreria"
+    password: "password",
+    database:"progettoFormazione"
   });
 
 //metodo per esperrore la connessione al db

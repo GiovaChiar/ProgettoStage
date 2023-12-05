@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<div class={{type}}>
-    <label class="form-label">{{title | titlecase}}</label>
-    <input class="form-control" type={{title}} (input)="onInput($event)" (change)="emitInput()">
+<div [ngClass]="type">
+    <label for={{title}} [ngStyle]="{'color':wrong?'red':''}">{{title | titlecase}}</label>
+    <input id={{title}} [ngStyle]="{'border-color':wrong?'red':'','border-width':wrong?'3px':''}" type={{type}} (input)="onInput($event)" (change)="emitInput()">
+    <p [hidden]="!wrong" [ngStyle]="{'color':'red'}">{{message}}</p>
 </div>

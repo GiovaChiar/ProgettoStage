@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,11 +6,16 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './input-tile.component.html',
-  styleUrl: './input-tile.component.scss'
+  styleUrl: './input-tile.component.scss',
 })
 export class InputTileComponent {
+
   @Input() title!: string;
-  @Input() type!: string;
+  @Input() type = 'text';
+
+  @Input() wrong = false;
+  @Input() message = 'missing field';
+
   value = '';
   @Output() inputEmitter = new EventEmitter<string>();
   constructor(){
@@ -19,6 +24,6 @@ export class InputTileComponent {
     this.value= (<HTMLInputElement>event.target).value
   }
   emitInput(){
-    this.inputEmitter.emit(this.value);
+    this.inputEmitter.emit(this.value)
   }
 }

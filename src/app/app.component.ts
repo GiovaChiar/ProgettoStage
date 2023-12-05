@@ -6,8 +6,9 @@ import { RegistrationComponent } from './components/pages/registration/registrat
 import { HomepageComponent } from './components/pages/homepage/homepage.component';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
-import { AuthenticationService } from './services/authentication.service';
+import { AuthenticationService } from './services/authentication/authentication.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 
 @Component({
     selector: 'app-root',

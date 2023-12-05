@@ -11,6 +11,8 @@ const flash= require("express-flash")
 const session= require("express-session")
 const bodyParser= require("body-parser")
 const methodOvveride= require("method-override")
+const path = require('path');
+const cors = require('cors');
 
 initializePasspoort(
     passport,
@@ -21,6 +23,7 @@ initializePasspoort(
 const users= []
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors)
 app.use(flash())
 app.use(session({
     name : 'codeil',
@@ -44,12 +47,12 @@ app.post("/register",checkNotAuthenticated, async(req,res)=>{
      try{
         const hashedPassword= await hash(RegisterUserDto)
             users.push({
-            id: Date.now().toString(), 
+            id: Date.now().toString(),
             name: RegisterUserDto.name,
             email: RegisterUserDto.email,
             password:hashedPassword,
         })
-        console.log(users); 
+        console.log(users);
         res.redirect("/login ")
 
      }catch {
@@ -72,7 +75,7 @@ app.get('/',checkAuthenticated, async (req, res) => {
     res.render("index.ejs")
 });
  
-app.get('/login',checkNotAuthenticated, async (req, res) => {
+app.get('login',checkNotAuthenticated, async (req, res) => {
     res.render("login.ejs")
 });
 
@@ -94,4 +97,5 @@ function checkNotAuthenticated(req, res, next) {
     next()
   }
 
-app.listen(3000);
+console.log("Start server on 1234")
+app.listen(1234);
