@@ -36,7 +36,7 @@ export class AuthenticationService {
     }else if(this.user.email === '' && this.user.username===''){
       return 2;
     }else{
-     // this.http.post('http://localhost:1234/register',this.user).subscribe(data=>{console.log(data)})
+      this.http.post('http://localhost:4000/login',this.user).subscribe(data=>{console.log(data)})
       //comando che prende l'oggetto dal backend e lo trasforma in user
       localStorage.setItem('user',JSON.stringify(this.user))
       return 3;

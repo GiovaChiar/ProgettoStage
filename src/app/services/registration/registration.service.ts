@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -13,7 +14,7 @@ export class RegistrationService {
   }
   private confirmpw = false
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
   setUsername(value: string){
     this.user.username = value
   }

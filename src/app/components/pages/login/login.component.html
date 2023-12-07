@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <div class="h-100 d-flex align-items-center justify-content-center p-3 bg-primary">
   <div class="bg-light border rounded border-top-start-0 border-dark p-3">
-    <button type="button" class="register" (click)="changeId()">change</button>
-    <app-input-tile [title]="id" [wrong]="wrongUsername" [message]="messageUsername" (inputEmitter)="handleUsernameEmitted($event)"></app-input-tile>
+    <div class="d-flex justify-content-center">
+      <app-input-tile [title]="id" [wrong]="wrongUsername" [message]="messageUsername" (inputEmitter)="handleUsernameEmitted($event)"></app-input-tile>
+      <button type="button" class="register" (click)="changeId()">change</button>
+    </div>
     <app-input-tile [title]="pw" [type]="pw" [wrong]="wrongPassword" [message]="messagePassword" (inputEmitter)="handlePasswordEmitted($event)"></app-input-tile>
-    <button type="button" class="login" (click)="loginRequest()" routerLink="/homepage">Login</button>        
-    <button type="button" class="register" routerLink="/registration-page">Not registered, yet?</button>
+    <div class="mx-auto d-flex justify-content-center">
+      <button type="button" class="login" (click)="loginRequest()" routerLink="/homepage">Login</button>        
+      <button type="button" class="register" routerLink="/registration-page">Not registered, yet?</button>
+    </div>
   </div>
 </div>

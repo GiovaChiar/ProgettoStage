@@ -97,5 +97,4 @@ function checkNotAuthenticated(req, res, next) {
     next()
   }
 
-console.log("Start server on 1234")
-app.listen(1234);
+app.listen(4000);
