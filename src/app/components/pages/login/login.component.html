@@ -7,7 +7,7 @@
     </div>
     <app-input-tile [title]="pw" [type]="pw" [wrong]="wrongPassword" [message]="messagePassword" (inputEmitter)="handlePasswordEmitted($event)"></app-input-tile>
     <div class="mx-auto d-flex justify-content-center">
-      <button type="button" class="login" (click)="loginRequest()" routerLink="/homepage">Login</button>        
+      <button type="button" class="login" (click)="loginRequest()">Login</button>        
       <button type="button" class="register" routerLink="/registration-page">Not registered, yet?</button>
     </div>
   </div>

@@ -1,2 +1,16 @@
 <!DOCTYPE html>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="border-end" [ngStyle]="{'visibility':isLoggedIn()?'hidden':'visible'}">
+        <button class="btn bg-transparent" routerLink="/login" >LOGIN</button>
+    </div>
+    <div class="border-end">
+        <button class="btn bg-transparent" routerLink="/library">LIBRARY</button>
+    </div>
+    <div class="">
+        <button class="btn bg-transparent" routerLink="">CATALOGUE</button>
+    </div>
+    <div class="border-start position-absolute end-0" [ngStyle]="{'visibility':isLoggedIn()?'visible':'hidden'}">
+        <button class="btn bg-transparent" routerLink="/account">ACCOUNT</button>
+    </div>
+</nav>
 <router-outlet></router-outlet>

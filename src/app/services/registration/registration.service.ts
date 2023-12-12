@@ -54,7 +54,7 @@ export class RegistrationService {
     if(!this.confirmpw)
       i = i*13
     if(i===1){
-      //invio richista http
+      this.http.post('http://localhost:23456/register',this.user).subscribe(data=>{console.log(data)})
       if(false)
         i = i*17
       if(false)

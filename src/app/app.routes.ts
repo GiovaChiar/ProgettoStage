@@ -1,12 +1,16 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/pages/login/login.component';
 import { RegistrationComponent } from './components/pages/registration/registration.component';
-import { HomepageComponent } from './components/pages/homepage/homepage.component';
 import { authGuard } from './guards/auth/auth.guard';
-import { regGuard } from './guards/reg/reg.guard';
+import { CatalogueComponent } from './components/pages/catalogue/catalogue.component';
+import { LibraryComponent } from './components/pages/library/library.component';
+import { AccountComponent } from './components/pages/account/account.component';
+import { BookpageComponent } from './components/utils/bookpage/bookpage.component';
 
 export const routes: Routes = [
-    {path: "",component: LoginComponent},
+    {path: "login", component: LoginComponent},
     {path: "registration-page", component: RegistrationComponent},
-    {path: "homepage", canActivate: [authGuard], component: HomepageComponent},
+    {path: "", component: CatalogueComponent, children: [{path: ":id", component: BookpageComponent}]},
+    {path: "library", canActivate: [authGuard],component: LibraryComponent, children:[{path: ":id", component: BookpageComponent}]},
+    {path: "account", canActivate: [authGuard], component: AccountComponent},
 ];

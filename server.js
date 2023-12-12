@@ -25,6 +25,12 @@ const users= []
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors)
 app.use(flash())
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+  });
 app.use(session({
     name : 'codeil',
     secret : 'something',
@@ -44,6 +50,7 @@ app.post("login", checkNotAuthenticated , passport.authenticate("local", {
 }))
 
 app.post("/register",checkNotAuthenticated, async(req,res)=>{
+    console.log('called?')
      try{
         const hashedPassword= await hash(RegisterUserDto)
             users.push({
@@ -54,7 +61,6 @@ app.post("/register",checkNotAuthenticated, async(req,res)=>{
         })
         console.log(users);
         res.redirect("/login ")
-
      }catch {
         res.redirect("/register")
      }
