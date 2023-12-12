@@ -56,27 +56,9 @@ app.post("/registrazione", function (req, res, next){
         });
     })
 
-// POST LOGIN utente in tabella utenti. Il json richiede come paramtri Username,Email,Password li acquisisce e li invia al database tramite query Insert 
-/*app.post("/login", function(request,result, next){
-        const username= request.body.username
-        const email= request.body.Email
-        const password= request.body.password
 
-        const rows = executeQuery(`SELECT * from utenti WHERE Email= "${email}" `);
-       
-        rows.then(function(username,password){
-        if(rows.username == "" || rows.password == ""){
-        result.send("Email o password non corrette");
-            }else{ 
-                executeQuery(`INSERT into login(Username,Email,Password) values('${username}','${email}','${password}')`).then(() => {
-                result.send("Login effettuato!")
-            })}})
-    })
-*/
-
-
-//LOGIN PROVA
-app.post('/login',  (req, res)=> { 
+//LOGIN 
+app.post('/login', (req, res)=> { 
     const sql= "SELECT * FROM login WHERE username = ? AND email= ? AND password = ? ";
     const values= [
         req.body.username,
@@ -88,14 +70,10 @@ app.post('/login',  (req, res)=> {
         return res.json(data);
     })
 })
-
-
-
-
-//------------------------------------------------------
-                
+              
 // AGGIUNTA DI UN LIBRO CON VERIFICA CHE L'ISBN NON SIA DIVERSO DA 13
 app.post("/registrazione-libro", function(request,result,next){
+    
     const isbn= request.body.isbn
     const titolo= request.body.titolo
     const NomeAutore= request.body.NomeAutore
@@ -105,7 +83,8 @@ app.post("/registrazione-libro", function(request,result,next){
     const PosizioneInLibreria= request.body.PosizioneInLibreria
     const NumeroDiCopie= request.body.NumeroDiCopie
 
-    const rows = executeQuery("SELECT * from login ");
+    const rows = executeQuery("SELECT * from libri ");
+    
     if (isbn.length != 13){
         result.send("Il codice ISBN inserito è sbagliato!") 
     }
@@ -114,5 +93,36 @@ app.post("/registrazione-libro", function(request,result,next){
     result.send("Libro registrato")
     })
 }})
+
+
+//GET DI TUTTI I LIBRI
+/*app.get("/listalibri", async (req, res) => {
+    const query = "SELECT * FROM libri";
+    const results = await executeQuery(query);
+    res.send(results)
+})*/
+app.get("/listalibri", async(req, res) => {
+    res.send(await executeQuery("SELECT * FROM libri"))
+   })
+
+
+
+// ALGORITMO DI ORDINAMENTO 
+app.get("/ordinamentoLibri", function (request, result){
+   const query= "SELECT * FROM libri ORDER BY NomeAutore";
+   executeQuery(query, (err, rows)=>{
+    if(err) throw err;
+    result.log(rows)
+})
+});
+
+
+
+
+
+
+
+
+
 
 app.listen(23456);  
