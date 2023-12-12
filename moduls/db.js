@@ -23,7 +23,7 @@ var pool =
         } catch (err) {
             reject(err)
         }
-        conn && conn.release()
+       conn && conn.release()
     });
 
 }
