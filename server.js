@@ -11,6 +11,7 @@ const mariadb= require('mariadb')
 const path = require('path');
 const cors= require('cors')
 const role= require('./RoleEnum/RoleEnum')
+const jwt = require('jsonwebtoken');
 
 app.use(cors())
 
@@ -53,7 +54,7 @@ app.post("/registrazione", function (req, res, next){
 
 //POST DI LOGIN UTENTE  
 app.post('/login', (req, res)=> { 
-    const sql= "SELECT * FROM login WHERE username = ? AND email= ? AND password = ? ";
+    const sql= "SELECT * FROM utenti WHERE username = ? AND email= ? AND password = ? ";
     const values= [
         req.body.username,
         req.body.email,
@@ -64,6 +65,9 @@ app.post('/login', (req, res)=> {
 
         return res.json({data: "Login effettuato"});
     })
+    const tokenJwt= jwt.sign({values:values},'secretkey',(err,token)=>{
+        res.json({token});
+})
 })
       
 // -----------------------------------------------------------SEZIONE DELETE RISERVATA ALL ADMIN-----------------------------------------------------------------
@@ -113,7 +117,7 @@ app.post("/registrazione-libro", function(request,result,next){
 if(ruolo!= role.Amministatore  || ruolo== role.Amministatore){
 // GET PER L'INTERA L'ISTA DEI LIBRI
     app.get("/listaLibri", async(req, res) => {
-    res.send(await executeQuery("SELECT * FROM libri"))
+    res.json(await executeQuery("SELECT * FROM libri"))
     })
     }
 }
