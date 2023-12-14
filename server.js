@@ -10,7 +10,7 @@ const executeQuery= require("./moduls/db")
 const mariadb= require('mariadb')
 const path = require('path');
 const cors= require('cors')
-
+const role= require('./RoleEnum/RoleEnum')
 
 app.use(cors())
 
@@ -23,41 +23,35 @@ app.use((req, res, next) => {
     );
     next();
   });
-
+// AUTENTICAZIONE UTENTE
+// POST DI REGISTRAZIONE DI UN UTENTE
 
 app.post("/registrazione", function (req, res, next){
-    const Username= req.body.Username
-    const Email= req.body.Email
-    const Password= req.body.Password
-    const Cognome= req.body.Cognome
-    const Nome= req.body.Nome
+     const Username= req.body.Username
+     const Email= req.body.Email
+     const Password= req.body.Password
+     const Cognome= req.body.Cognome
+     const Nome= req.body.Nome
     
     const rows = executeQuery(`SELECT * from utenti WHERE Email= "${Email}" `);
     rows.then(function(email,username){
     if(email == 0 || username == 0){
         executeQuery(`INSERT into utenti(Username,Email,Password,Cognome,Nome) values('${Username}','${Email}','${Password}','${Cognome}','${Nome}')`).then(() => {
-            res.send('Registrazione effettuata!');
+            res.json({utente: "UTENTE REGISTRATO "});
         })
-    }else {
-        res.send("Email o Username non validi!");
-    }
-})})
+             }else if(Email == 0 && Username!= 0){
+            res.json({emailVuota:"Campo email vuoto"});
+        }
+             else if(Email != 0 && Username== 0){
+            res.json({emailVuota:"Campo username vuoto"});
 
-    //GET di un user con identificativo id per la rimozione del record 
-    app.get('/user/delete/:id', function(req,res,next){
-        var id= req.body.id
-        var query= `DELETE FROM utenti WHERE id = "${id}"`
-        executeQuery(query,function(error,data){
-            if(error){
-                throw err;
-            }else{
-                response.redirect("/login");
-            }
-        });
-    })
+        }else {
+            res.json({emailEUsername:"Email e Username esistenti"})
+        }
+        }) 
+       })
 
-
-//LOGIN 
+//POST DI LOGIN UTENTE  
 app.post('/login', (req, res)=> { 
     const sql= "SELECT * FROM login WHERE username = ? AND email= ? AND password = ? ";
     const values= [
@@ -66,12 +60,33 @@ app.post('/login', (req, res)=> {
         req.body.password
     ]
     executeQuery(sql, values, (err,data) => {
-        if(err) return res.json("LOGIN FAILED");
-        return res.json(data);
+        if(err) return    res.json({login: "LOGIN FALLITO!"});
+
+        return res.json({data: "Login effettuato"});
     })
 })
-              
-// AGGIUNTA DI UN LIBRO CON VERIFICA CHE L'ISBN NON SIA DIVERSO DA 13
+      
+// -----------------------------------------------------------SEZIONE DELETE RISERVATA ALL ADMIN-----------------------------------------------------------------
+const ruolo = role.Amministatore 
+
+if(ruolo == role.Amministatore){
+//DELETE CON PATH PARAM PER CANCELLARE UN UTENTE TRAMITE ID
+
+  app.delete('/user/delete/:id', function(req,res,next){
+        var id= req.params.id   
+        var query= `DELETE FROM utenti WHERE id = "${id}"`
+        executeQuery(query,function(error,data){
+            if(error){
+                throw err;
+            }else{
+                result.json({utente: "Utente cancellato"}) 
+            }
+                })
+    })
+
+// SEZIONE LIBRERIA
+    
+// AGGIUNTA DI UN LIBRO CON VERIFICA CHE L'ISBN NON SIA DIVERSO DA 13 DIMENSIONE EFFETTIVA DI UN CODICE ISBN
 app.post("/registrazione-libro", function(request,result,next){
     
     const isbn= request.body.isbn
@@ -86,28 +101,24 @@ app.post("/registrazione-libro", function(request,result,next){
     const rows = executeQuery("SELECT * from libri ");
     
     if (isbn.length != 13){
-        result.send("Il codice ISBN inserito è sbagliato!") 
+        result.json({libro: "Il codice ISBN inserito è sbagliato!"}) 
     }
     else{
     executeQuery(`INSERT into libri(isbn,titolo,NomeAutore,CognomeAutore,Genere,Lingua,PosizioneInLibreria,NumeroDiCopie) values('${isbn}','${titolo}','${NomeAutore}','${CognomeAutore}','${Genere}','${Lingua}','${PosizioneInLibreria}','${NumeroDiCopie}')`).then(() => {
-    result.send("Libro registrato")
+    result.json({libro: "Libro registrato"})
     })
-}})
+}}) 
 
-
-//GET DI TUTTI I LIBRI
-/*app.get("/listalibri", async (req, res) => {
-    const query = "SELECT * FROM libri";
-    const results = await executeQuery(query);
-    res.send(results)
-})*/
-app.get("/listalibri", async(req, res) => {
+// GET RISERVATA ALL'ADMIN E AGLI UTENTI ANCHE NON REGISTRATI
+if(ruolo!= role.Amministatore  || ruolo== role.Amministatore){
+// GET PER L'INTERA L'ISTA DEI LIBRI
+    app.get("/listaLibri", async(req, res) => {
     res.send(await executeQuery("SELECT * FROM libri"))
-   })
+    })
+    }
+}
 
-
-
-// ALGORITMO DI ORDINAMENTO 
+// ALGORITMO DI ORDINAMENTO DEI LIBRI CON ORDER BY
 app.get("/ordinamentoLibri", function (request, result){
    const query= "SELECT * FROM libri ORDER BY NomeAutore";
    executeQuery(query, (err, rows)=>{
@@ -115,8 +126,6 @@ app.get("/ordinamentoLibri", function (request, result){
     result.log(rows)
 })
 });
-
-
 
 
 
