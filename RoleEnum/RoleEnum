@@ -1,0 +1,7 @@
+const Ruoli = { 
+    Amministatore: "Amministatore",
+    UtenteNonRegistrato: "UtenteNonRegistrato",
+    UtenteRegistrato: "UtenteRegistrato",
+
+}
+Object.freeze(Ruoli)

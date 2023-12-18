@@ -1,7 +1,4 @@
 'use strict'
-if (process.env.NODE_ENV!== "production"){
-    require("dotenv").config()
-}
 const express= require("express")
 const app= express()
 const flash= require("express-flash")
@@ -12,11 +9,14 @@ const path = require('path');
 const cors= require('cors')
 const role= require('./RoleEnum/RoleEnum')
 const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
 
 app.use(cors())
 
 app.use(express.json())   // uso di json
 app.use(express.urlencoded({extended: true}))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -24,6 +24,7 @@ app.use((req, res, next) => {
     );
     next();
   });
+  
 // AUTENTICAZIONE UTENTE
 // POST DI REGISTRAZIONE DI UN UTENTE
 
@@ -33,21 +34,21 @@ app.post("/registrazione", function (req, res, next){
      const Password= req.body.Password
      const Cognome= req.body.Cognome
      const Nome= req.body.Nome
-    
+     
     const rows = executeQuery(`SELECT * from utenti WHERE Email= "${Email}" `);
     rows.then(function(email,username){
     if(email == 0 || username == 0){
         executeQuery(`INSERT into utenti(Username,Email,Password,Cognome,Nome) values('${Username}','${Email}','${Password}','${Cognome}','${Nome}')`).then(() => {
-            res.json({utente: "UTENTE REGISTRATO "});
+            res.json({utente: "UTENTE REGISTRATO"});
         })
              }else if(Email == 0 && Username!= 0){
             res.json({emailVuota:"Campo email vuoto"});
         }
              else if(Email != 0 && Username== 0){
-            res.json({emailVuota:"Campo username vuoto"});
+            res.json({UsernameVuota:"Campo username vuoto"});
 
         }else {
-            res.json({emailEUsername:"Email e Username esistenti"})
+            res.json({emailEUsernameVuoti:"Email e Username esistenti"})
         }
         }) 
        })
@@ -60,22 +61,24 @@ app.post('/login', (req, res)=> {
         req.body.email,
         req.body.password
     ]
-    executeQuery(sql, values, (err,data) => {
+   executeQuery(sql, values, (err,data) => {
         if(err) return    res.json({login: "LOGIN FALLITO!"});
 
         return res.json({data: "Login effettuato"});
     })
-    const tokenJwt= jwt.sign({values:values},'secretkey',(err,token)=>{
+    const token= jwt.sign({values:values.password},'secretkey',(err,token)=>{
         res.json({token});
+        
+
 })
 })
       
-// -----------------------------------------------------------SEZIONE DELETE RISERVATA ALL ADMIN-----------------------------------------------------------------
+// -----------------------------------------------------------SEZIONE RISERVATA ALL'ADMIN-----------------------------------------------------------------
 const ruolo = role.Amministatore 
 
 if(ruolo == role.Amministatore){
-//DELETE CON PATH PARAM PER CANCELLARE UN UTENTE TRAMITE ID
 
+//DELETE CON PATH PARAM PER CANCELLARE UN UTENTE TRAMITE ID
   app.delete('/user/delete/:id', function(req,res,next){
         var id= req.params.id   
         var query= `DELETE FROM utenti WHERE id = "${id}"`
@@ -131,10 +134,28 @@ app.get("/ordinamentoLibri", function (request, result){
 })
 });
 
+app.post('/modificaPassword', async (req, res) => {
+    const username= req.body.Username;
+    const email= req.body.Email;
+    const password= req.body.Password;
 
+    try {
+      // Verifica se l'utente esiste nel database
+      const query = "SELECT * FROM utenti WHERE username = ? AND email = ?";
+      const result = await executeQuery(query, [username, email]);
 
-
-
+      if (result.length > 0) {
+        // L'utente esiste, procedi con la modifica della password
+        const updateQuery = "UPDATE utenti SET password = ? WHERE username = ?";
+        await executeQuery(updateQuery, [password, username]);
+        res.status(200).json({ message: 'Password modificata con successo' });
+      } else {
+        res.status(400).json({ message: 'Utente non trovato' });
+      }
+    } catch (error) {
+        res.status(500).json({ message: 'Si è verificato un errore' });
+    }
+  });
 
 
 
