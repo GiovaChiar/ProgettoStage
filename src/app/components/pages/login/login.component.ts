@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTileComponent } from "../../utils/input-tile/input-tile.component";
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -24,7 +24,7 @@ export class LoginComponent{
   wrongPassword = false
   messagePassword = ''
   
-  constructor(private autService: AuthenticationService){
+  constructor(private autService: AuthenticationService, private route: Router){
     
   }
   changeId(){
@@ -71,6 +71,9 @@ export class LoginComponent{
         this.wrongUsername = true;
         this.messageUsername = "wrong credentials"
         this.messagePassword = "wrong credentials"
+        break
+      case 4:
+        this.route.navigate(['library'])
         break
     }
   }

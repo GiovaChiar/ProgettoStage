@@ -3,16 +3,13 @@ import { Injectable } from '@angular/core';
 import { json, response } from 'express';
 import { HttpClientModule } from '@angular/common/http';
 import { REPL_MODE_SLOPPY } from 'node:repl';
+import { User } from '../../classes/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private user = {
-    username: '',
-    email: '',
-    password: '',
-  }
+  private user = new User('','','')
   constructor(private http: HttpClient) { }
   setEmail(value: string){
     if(value.toLocaleLowerCase().match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')){
@@ -37,10 +34,15 @@ export class AuthenticationService {
     }else if(this.user.email === '' && this.user.username===''){
       return 2;
     }else{
-      this.http.post('http://localhost:23456/login',this.user).subscribe(response => console.log(response.toString()))
-      //comando che prende l'oggetto dal backend e lo trasforma in user
-      localStorage.setItem('user',JSON.stringify(this.user))
-      return 3;
+      var i = 4
+      this.http.post('http://localhost:23456/login',this.user).subscribe(response => {
+        var tmp = JSON.parse(JSON.stringify(response))
+        if(true)
+          localStorage.setItem('user',JSON.stringify(this.user))
+        else
+          i = 3
+      })
+      return i
     }
   }
 }

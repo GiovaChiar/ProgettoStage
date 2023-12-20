@@ -1,6 +1,14 @@
 <!DOCTYPE html>
-<div [ngClass]="type">
-    <label for={{title}} [ngStyle]="{'color':wrong?'red':''}">{{title | titlecase}}</label>
-    <input id={{title}} [ngStyle]="{'border-color':wrong?'red':'','border-width':wrong?'3px':''}" type={{type}} (input)="onInput($event)" (change)="emitInput()">
-    <p [hidden]="!wrong" [ngStyle]="{'color':'red'}">{{message}}</p>
+<div class="container-fluid">
+    <div class="row align-items-center">
+        <div class="col">
+            <label class="form-label" for={{title}}>{{title | titlecase}}</label>
+        </div>
+        <div class="col">
+            <input id={{title}} class="border-0 border-bottom border-dark d-inline-flex focus-ring focus-ring-dark py-1 px-2 text-decoration-none" [ngStyle]="{'border-color':wrong?'red':''}" type={{type}} (input)="onInput($event)" (change)="emitInput()">
+       </div>
+    </div>
+    <div [hidden]="!wrong" class="row">
+        <p [ngStyle]="{'color':'red'}">{{message}}</p>
+    </div>
 </div>

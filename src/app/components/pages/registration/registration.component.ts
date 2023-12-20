@@ -111,7 +111,7 @@ export class RegistrationComponent {
   registrationRequest(){
     var val = this.regService.tryRegister()
     if(val===1)
-      this.router.navigate(['..'])
+      this.router.navigate(['login'])
     var cnt = 0
     var list = [2,3,5,7,11,13,17,19]
     while(val!==1 && list[cnt]!==null){
