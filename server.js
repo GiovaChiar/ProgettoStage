@@ -9,14 +9,12 @@ const path = require('path');
 const cors= require('cors')
 const role= require('./RoleEnum/RoleEnum')
 const jwt = require('jsonwebtoken');
-const bodyParser = require('body-parser');
 
 app.use(cors())
 
 app.use(express.json())   // uso di json
 app.use(express.urlencoded({extended: true}))
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -26,52 +24,62 @@ app.use((req, res, next) => {
   });
   
 // AUTENTICAZIONE UTENTE
-// POST DI REGISTRAZIONE DI UN UTENTE
+// ROUTH DI REGISTRAZIONE DI UN UTENTE
+app.post("/registrazione", async function (req, res, next) {
+    try {
+    const Username= req.body.Username;
+    const Email= req.body.Email;
+    const Password= req.body.Password;
+    const Cognome= req.body.Cognome;
+    const Nome= req.body.Nome;
 
-app.post("/registrazione", function (req, res, next){
-     const Username= req.body.Username
-     const Email= req.body.Email
-     const Password= req.body.Password
-     const Cognome= req.body.Cognome
-     const Nome= req.body.Nome
-     
-    const rows = executeQuery(`SELECT * from utenti WHERE Email= "${Email}" `);
-    rows.then(function(email,username){
-    if(email == 0 || username == 0){
-        executeQuery(`INSERT into utenti(Username,Email,Password,Cognome,Nome) values('${Username}','${Email}','${Password}','${Cognome}','${Nome}')`).then(() => {
-            res.json({utente: "UTENTE REGISTRATO"});
-        })
-             }else if(Email == 0 && Username!= 0){
-            res.json({emailVuota:"Campo email vuoto"});
-        }
-             else if(Email != 0 && Username== 0){
-            res.json({UsernameVuota:"Campo username vuoto"});
+    const selectQuery = "SELECT * FROM utenti WHERE Email= ?";
+    const insertQuery = "INSERT INTO utenti(Username,Email,Password,Cognome,Nome) VALUES (?, ?, ?, ?, ?)";
 
-        }else {
-            res.json({emailEUsernameVuoti:"Email e Username esistenti"})
+    const emailRows = await executeQuery(selectQuery, [Email]);
+
+    if(emailRows.length == 0) {
+         if(Password != "") {
+         await executeQuery(insertQuery, [Username, Email, Password, Cognome, Nome]);
+         res.json({utente: "UTENTE REGISTRATO"});
+         } else {
+            res.json({passwordVuota: "Campo password vuoto"});
         }
-        }) 
-       })
+     } 
+    else if (Email == "") {
+        res.json({emailVuota: "Campo email vuoto"});
+    } else if (Username == "") {
+         res.json({usernameVuota: "Campo username vuoto"});
+     } else {
+         res.json({emailEUsernameVuoti: "Email e Username esistenti"});
+      } 
+     } catch (error) {
+        console.log(error);
+        res.status(500).json({error: "Errore del server"});
+    }
+})
 
 //POST DI LOGIN UTENTE  
-app.post('/login', (req, res)=> { 
-    const sql= "SELECT * FROM utenti WHERE username = ? AND email= ? AND password = ? ";
-    const values= [
-        req.body.username,
-        req.body.email,
-        req.body.password
-    ]
-   executeQuery(sql, values, (err,data) => {
-        if(err) return    res.json({login: "LOGIN FALLITO!"});
-
-        return res.json({data: "Login effettuato"});
-    })
-    const token= jwt.sign({values:values.password},'secretkey',(err,token)=>{
-        res.json({token});
-        
-
-})
-})
+// Route per effettuare la login
+app.post('/login', (req, res) => {
+    const { username, password, email } = req.body;
+    // Verifica se tutti i campi sono presenti
+    if (username && password && email) {
+      // Cerca l'utente nella tabella
+      const utente = "SELECT * FROM utenti WHERE username=? AND passwoerd=? AND email=?"
+  
+      if (utente) {
+        // Genera un token JWT
+        const token = jwt.sign({ passwoerd: utente.passwoerd }, 'chiaveSegretaDelToken');
+  
+        res.json({ token }); // Invia il token al client
+      } else {
+        res.status(401).json({ message: 'Credenziali non valide' }); // Credenziali non valide
+      }
+    } else {
+      res.status(400).json({ message: 'Devi fornire username, password ed email' }); // Campi mancanti
+    }
+  });
       
 // -----------------------------------------------------------SEZIONE RISERVATA ALL'ADMIN-----------------------------------------------------------------
 const ruolo = role.Amministatore 
@@ -80,7 +88,8 @@ if(ruolo == role.Amministatore){
 
 //DELETE CON PATH PARAM PER CANCELLARE UN UTENTE TRAMITE ID
   app.delete('/user/delete/:id', function(req,res,next){
-        var id= req.params.id   
+    
+    var id= req.params.id   
         var query= `DELETE FROM utenti WHERE id = "${id}"`
         executeQuery(query,function(error,data){
             if(error){
@@ -90,6 +99,7 @@ if(ruolo == role.Amministatore){
             }
                 })
     })
+
 
 // SEZIONE LIBRERIA
     
@@ -118,6 +128,7 @@ app.post("/registrazione-libro", function(request,result,next){
 
 // GET RISERVATA ALL'ADMIN E AGLI UTENTI ANCHE NON REGISTRATI
 if(ruolo!= role.Amministatore  || ruolo== role.Amministatore){
+
 // GET PER L'INTERA L'ISTA DEI LIBRI
     app.get("/listaLibri", async(req, res) => {
     res.json(await executeQuery("SELECT * FROM libri"))
@@ -134,7 +145,22 @@ app.get("/ordinamentoLibri", function (request, result){
 })
 });
 
-app.post('/modificaPassword', async (req, res) => {
+// DELETE DI UN LIBRO TRAMITE PATH VARIABLE 
+app.delete('/libri/delete/:id', function(req,res,next){
+    
+    var id= req.params.id   
+        var query= `DELETE FROM libri WHERE id = "${id}"`
+        executeQuery(query,function(error,data){
+            if(error){
+                throw err;
+            }else{
+                result.json({utente: "Libro cancellato"}) 
+            }
+                })
+    })
+ // MODIFICA DELLA PASSWORD DELL'UTENTE
+
+app.put('/modificaPassword', async (req, res) => {
     const username= req.body.Username;
     const email= req.body.Email;
     const password= req.body.Password;
@@ -143,7 +169,6 @@ app.post('/modificaPassword', async (req, res) => {
       // Verifica se l'utente esiste nel database
       const query = "SELECT * FROM utenti WHERE username = ? AND email = ?";
       const result = await executeQuery(query, [username, email]);
-
       if (result.length > 0) {
         // L'utente esiste, procedi con la modifica della password
         const updateQuery = "UPDATE utenti SET password = ? WHERE username = ?";
@@ -157,6 +182,4 @@ app.post('/modificaPassword', async (req, res) => {
     }
   });
 
-
-
-app.listen(23456);  
+app.listen(23456);
