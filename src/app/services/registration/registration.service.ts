@@ -57,6 +57,7 @@ export class RegistrationService {
     if (i === 1) {
       var res
       this.http.post('http://localhost:23456/registrazione', this.user).subscribe(response => {
+        console.log(JSON.stringify(response))
         var tmp = JSON.parse(JSON.stringify(response))
         if (tmp.username !== '')
           i = i * 17

@@ -36,8 +36,9 @@ export class AuthenticationService {
     }else{
       var i = 4
       this.http.post('http://localhost:23456/login',this.user).subscribe(response => {
+        console.log(JSON.stringify(response))
         var tmp = JSON.parse(JSON.stringify(response))
-        if(true)
+        if(tmp.token)
           localStorage.setItem('user',JSON.stringify(this.user))
         else
           i = 3
