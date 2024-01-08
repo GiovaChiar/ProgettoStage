@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<div>
+    <app-input-tile [title]="'title'" (inputEmitter)="handleTitle($event)"></app-input-tile>
+    <app-input-tile [title]="'ISBN'" (inputEmitter)="handleIsbn($event)"></app-input-tile>
+    <app-input-tile [title]="'surname'" (inputEmitter)="handleSurname($event)"></app-input-tile>
+    <app-input-tile [title]="'genre'" (inputEmitter)="handleGenre($event)"></app-input-tile>
+    <app-input-tile [title]="'language'" (inputEmitter)="handleLanguage($event)"></app-input-tile>
+    <app-input-tile [title]="'position'" (inputEmitter)="handlePosition($event)"></app-input-tile>
+    <app-input-tile [title]="'copies'" (inputEmitter)="handleCopies($event)"></app-input-tile>
+    <button (click)="addBook()">ADD BOOK</button>
+</div>
+<div>
+    <app-input-tile [title]="'ISBN TO REMOVE'" (inputEmitter)="handleRemove($event)"></app-input-tile>
+    <button (click)="removeBook()">REMOVE BOOK</button>
+</div>

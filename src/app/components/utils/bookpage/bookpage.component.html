@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<div class="">
+    <div class="row">
+        <div class="col">
+            <div class="py-1">{{book.title}}</div>
+            <div class="py-1">{{book.name}} {{book.surname}}</div>
+            <div class="py-1">{{book.genre}}</div>
+            <div class="py-1">{{book.language}}</div>
+            <div class="py-1">{{book.position}}</div>
+            <div class="py-1">{{book.state}}</div>
+        </div>
+    </div>
+    <div class="row border-top border-dark d-flex flex-wrap justify-content-between">
+            <button class="btn bg-transparent" [ngStyle]="{'visibility':getLogin()?'visible':'hidden'}">RENT</button>
+            <button class="btn bg-transparent" [ngStyle]="{'visibility':getLogin()?'visible':'hidden'}">GIVE BACK</button>
+    </div>
+</div>

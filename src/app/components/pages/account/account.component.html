@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<div class="ps-5 pe-2">
+    <div class="border-bottom border-dark p-2">
+        <button class="btn bg-transparent" (click)="logout()" routerLink="">LOGOUT</button>
+    </div>
+    <div class="border-bottom border-dark p-2">
+        <button class="btn bg-transparent" (click)="showUpdate()">Update Password</button>
+        <div *ngIf="changing; then thenBlock else elseBlock"></div>
+        <ng-template #thenBlock>
+            <div class="py-1"><app-input-tile [title]="'New Password'" (inputEmitter)="handleNewPasswordEmitted($event)" [type]="'password'" [message]="messagePwconfirm" [wrong]="wrongNewPassword" ></app-input-tile></div>
+            <div class="py-1"><app-input-tile class="py-1" [title]="'Confirm New Password'" (inputEmitter)="handleCorfirmPW($event)" [type]="'password'" [message]="messagePwconfirm" [wrong]="wrongPwconfirm"></app-input-tile></div>
+            <button class="btn bg-transparent border dark" (click)="changePassword()">Update Password</button>
+        </ng-template>
+        <ng-template #elseBlock>
+        </ng-template>
+    </div>
+</div>
