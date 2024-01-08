@@ -13,6 +13,9 @@ export class RegistrationService {
     surname: '',
     password: '',
   }
+  getUser(){
+    return this.user
+  }
   private confirmpw = false
 
   constructor(private http: HttpClient) { }

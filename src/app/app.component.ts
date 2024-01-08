@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LoginComponent } from "./components/pages/login/login.component";
 import { RegistrationComponent } from './components/pages/registration/registration.component';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -18,9 +18,12 @@ import { NgbPaginationModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap'
     styleUrls: ['./app.component.scss'],
     imports: [CommonModule, LoginComponent, RegistrationComponent, NgbModule, HttpClientModule,RouterOutlet, RouterLink, RouterLinkActive, NgbPaginationModule, NgbAlertModule],
 })
-export class AppComponent{
+export class AppComponent implements OnInit{
   title = 'progettoFormazione';
-  constructor(private modalService: NgbModal) {
+  constructor(private modalService: NgbModal, private route: Router,) {
+  }
+  ngOnInit(): void {
+    this.route.navigate(['catalogue'])
   }
   public isLoggedIn(){
     if (typeof localStorage !== 'undefined'){

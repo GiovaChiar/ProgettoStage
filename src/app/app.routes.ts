@@ -14,3 +14,5 @@ export const routes: Routes = [
     {path: "catalogue", component: CatalogueComponent, children: [{path: ":id", component: BookpageComponent}]},
     {path: "library", canActivate: [authGuard],component: LibraryComponent, children:[{path: ":id", component: BookpageComponent}], }
 ];
+
+"/"

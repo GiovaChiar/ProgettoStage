@@ -1,16 +1,22 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { json, response } from 'express';
 import { HttpClientModule } from '@angular/common/http';
 import { REPL_MODE_SLOPPY } from 'node:repl';
 import { User } from '../../classes/user';
+import { time, timeStamp } from 'node:console';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService {
+export class AuthenticationService implements OnDestroy {
   private user = new User('','','')
   constructor(private http: HttpClient) { }
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe()
+  }
+  private sub: Subscription | undefined
   setEmail(value: string){
     if(value.toLocaleLowerCase().match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')){
       this.user.email = value
@@ -18,6 +24,9 @@ export class AuthenticationService {
     }else{
       return false
     }
+  }
+  getUser(){
+    return this.user
   }
   setUsername(value: string){
     this.user.username = value
@@ -34,16 +43,7 @@ export class AuthenticationService {
     }else if(this.user.email === '' && this.user.username===''){
       return 2;
     }else{
-      var i = 4
-      this.http.post('http://localhost:23456/login',this.user).subscribe(response => {
-        console.log(JSON.stringify(response))
-        var tmp = JSON.parse(JSON.stringify(response))
-        if(tmp.token)
-          localStorage.setItem('user',JSON.stringify(this.user))
-        else
-          i = 3
-      })
-      return i
+      return 4;
     }
   }
 }

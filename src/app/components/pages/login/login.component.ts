@@ -1,9 +1,10 @@
-import { Component, Output } from '@angular/core';
+import { Component, OnDestroy, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTileComponent } from "../../utils/input-tile/input-tile.component";
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-login',
@@ -13,7 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
     imports: [CommonModule, InputTileComponent, RouterOutlet, RouterLink, RouterLinkActive],
     providers: [HttpClientModule, AuthenticationService]
 })
-export class LoginComponent{
+export class LoginComponent implements OnDestroy{
 
   id = 'email'
   private id2 = 'username'
@@ -23,8 +24,13 @@ export class LoginComponent{
   pw = 'password'
   wrongPassword = false
   messagePassword = ''
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe()
+  }
+  private sub: Subscription | undefined
   
-  constructor(private autService: AuthenticationService, private route: Router){
+  constructor(private autService: AuthenticationService, private route: Router, private http: HttpClient){
     
   }
   changeId(){
@@ -66,15 +72,23 @@ export class LoginComponent{
         this.wrongUsername = true
         this.messageUsername = "missing username"
         break
-      case 3:
-        this.wrongPassword = true;
+      case 4:
+        const user = this.autService.getUser()
+        this.sub = this.http.post('http://localhost:23456/login', user).subscribe(response => {
+          console.log(JSON.stringify(response))
+          var tmp = JSON.parse(JSON.stringify(response))
+          if(tmp instanceof Object){
+            localStorage.setItem('user',JSON.stringify(tmp[0].Id))
+            this.route.navigate(['library'])
+          }else{
+            this.wrongPassword = true;
         this.wrongUsername = true;
         this.messageUsername = "wrong credentials"
         this.messagePassword = "wrong credentials"
-        break
-      case 4:
-        this.route.navigate(['library'])
+          }
+        })
         break
     }
   }
+
 }
