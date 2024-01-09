@@ -16,12 +16,7 @@ app.use(express.urlencoded({extended: true}))
 
 // routers
 const router= require('./routes/UserRoutes.js')
-app.use('/api/utenti', router)
-
-// testing api
-app.get('/',(req,res)=>{
-    res.json({message: 'hello from api'})
-})
+app.use('/', router)
 
 
 // port 

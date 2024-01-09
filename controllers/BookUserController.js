@@ -42,7 +42,7 @@ const addLoan = async (req, res) => {
     }
 };
 
-const getLoan = async (req, res) => {
+const getLoan = async (req, res) => { 
   const { userIdUser } = req.body;
   try {
     const loans = await BookUser.findAll({

@@ -6,24 +6,22 @@ const router= require('express').Router()
 
 
 // Route for User
-router.post("/addUser", UsersController.addUser)
+router.post("/registration", UsersController.addUser)
 router.post("/login", UsersController.login)
+router.put("/changePassword", UsersController.cambioPassword)
+router.get("/UserList", UsersController.getAllUser)
 router.delete("/deleteUser", UsersController.deleteUser)
-router.put("/cambioPassword", UsersController.cambioPassword)
-
-router.get("/getAllUser", UsersController.getAllUser)
 
 // Route for books
-router.post("/addBook",BooksController.addBook)
-router.get("/getAllBooks", BooksController.getAllBooks)
+router.post("/registrationBook",BooksController.addBook)
+router.get("/BookList", BooksController.getAllBooks)
 router.delete("/deleteBook", BooksController.deleteBooks)
 
 
 //router.post("/aggiuntaPrestito",BookUserController.bookUser )
 router.post("/addLoan",BookUserController.addLoan)
-router.get('/getLoan',BookUserController.getLoan);
+router.get('/LoanList',BookUserController.getLoan);
 router.delete("/deleteLoan", BookUserController.deleteLoan);
-
 
 
 module.exports= router

@@ -131,9 +131,6 @@ const getAllUser= async (req,res)=> {
 }
 
 
-
-
-
 module.exports= {
     addUser,
     login,
