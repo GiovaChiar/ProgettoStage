@@ -1,9 +1,11 @@
 const db = require('../models')
+const { Sequelize } = require('sequelize');
 
 // create main models
 
 const User= db.USER
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 
 //main works 
@@ -70,19 +72,27 @@ const addUser = async (req, res) => {
     return token;
     };
 
-  const login = async (req, res) => {
-    try {
-    const user = await User.findOne({ where: { username: req.body.Username, email: req.body.Email, password: req.body.Password } });
-    if (!user || user.Password !== req.body.Password) {
-    throw new Error("Invalid credentials");
-    }
-    
-    const token = generateToken(User);
-    res.json({ message: "Login successful",idUser:user.idUser, token });
-    } catch (error) {
-    res.status(401).send(error.message);
-    }
-    };
+    const login = async (req, res) => {
+        try {
+          const { Username, Email, Password } = req.body;
+          const user = await User.findOne({
+            where: [
+              Sequelize.or(
+                { username: Username },
+                { email: Email }
+              ),
+              { password: Password }
+            ]
+          });
+          if (!user || user.Password !== Password) {
+            throw new Error("Invalid credentials");
+          }
+          const token = generateToken(user);
+          res.json({ message: "Login successful", idUser: user.idUser, token });
+        } catch (error) {
+          res.status(401).send(error.message);
+        }
+      };
 
 // DELETE DI UN UTENTE TRAMITE ID
     const deleteUser= async (req,res)=>{
@@ -92,7 +102,6 @@ const addUser = async (req, res) => {
     }
 
 // update password Utenti
-const bcrypt = require('bcryptjs');
 const cambioPassword = async (req, res) => {
     const { Username, Email, Password } = req.body;
 

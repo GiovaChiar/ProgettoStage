@@ -7,11 +7,12 @@ const corsOption= {
     origin: 'http:localhost:23456'
 
 }
+
+
 // middleware 
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-
 
 
 // routers
@@ -26,3 +27,6 @@ const PORT= process.env.PORT || 23456
 app.listen(PORT, ()=>{
     console.log(`Il server è runnato sulla porta ${PORT}`)
 })
+
+console.log(process.env);
+console.log(process.env.NODE_ENV);
