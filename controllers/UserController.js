@@ -74,25 +74,28 @@ const addUser = async (req, res) => {
 
     const login = async (req, res) => {
         try {
-          const { Username, Email, Password } = req.body;
-          const user = await User.findOne({
-            where: [
-              Sequelize.or(
-                { username: Username },
-                { email: Email }
-              ),
-              { password: Password }
+        const { Username, Email, Password } = req.body;
+        const user = await User.findOne({
+             where: {
+             [Sequelize.Op.or]: [
+             { username: Username },
+             { email: Email }
             ]
-          });
-          if (!user || user.Password !== Password) {
-            throw new Error("Invalid credentials");
           }
-          const token = generateToken(user);
-          res.json({ message: "Login successful", idUser: user.idUser, token });
-        } catch (error) {
-          res.status(401).send(error.message);
+        });
+        if (!user) {
+            throw new Error("Invalid credentials");
         }
-      };
+        const isPasswordValid = await bcrypt.compare(Password, user.Password);
+            if (!isPasswordValid) {
+            throw new Error("Invalid credentials");
+        }
+            const token = generateToken(user);
+            res.json({ message: "Login successful", idUser: user.idUser, token });
+        } catch (error) {
+             res.status(401).send(error.message);
+        }
+        };
 
 // DELETE DI UN UTENTE TRAMITE ID
     const deleteUser= async (req,res)=>{
