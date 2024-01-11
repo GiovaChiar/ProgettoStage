@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { AdiminService } from '../../../services/admin/adimin.service';
 import { InputTileComponent } from "../../utils/input-tile/input-tile.component";
 import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
+import { Subscription } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-admin',
@@ -12,8 +14,13 @@ import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
     imports: [CommonModule, InputTileComponent]
 })
 export class AdminComponent {
-  constructor(private adminService: AdiminService){}
-
+  constructor(private adminService: AdiminService, private http: HttpClient){}
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe()
+  }
+  private sub: Subscription | undefined
+  message = "missing field"
+  messageIbs = "must be 13 digits"
   handleIsbn(value: string){
     this.adminService.setIsbn(value)
   }
@@ -43,9 +50,25 @@ export class AdminComponent {
     this.adminService.setIsbnRem(value)
   }
   addBook(){
-    this.adminService.addBook()
+    switch(this.adminService.addBook()){
+      case 1: 
+        this.sub = this.http.post('http://localhost:23456/registrazione-libro',this.adminService.getBook()).subscribe(response => {
+          var tmp = JSON.parse(JSON.stringify(response))
+          console.log(tmp.toString())
+        })
+        break
+    }
   }
   removeBook(){
-    this.adminService.removeBook()
+    switch(this.adminService.removeBook()){
+      case 0:
+        break
+      case 1:
+        this.sub = this.http.delete('http://localhost:23456/deleteLibri/'+this.adminService.getDelBook()).subscribe(response => {
+        var tmp = JSON.parse(JSON.stringify(response))
+        console.log(tmp.toString())
+      })
+        break
+    }
   }
 }

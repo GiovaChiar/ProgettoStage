@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { InputTileComponent } from "../../utils/input-tile/input-tile.component";
 import { AccountService } from '../../../services/account/account.service';
+import { HttpClient } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-account',
@@ -24,13 +26,17 @@ export class AccountComponent {
   wrongPwconfirm = false
   messagePwconfirm = 'passwords do not match'
 
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe()
+  }
+  private sub: Subscription | undefined
 
-  constructor(private route: Router,private accountService: AccountService){}
+  constructor(private route: Router,private accountService: AccountService, private http: HttpClient){}
   logout(){
     this.accountService.logout()
     this.route.navigate(['catalogue'])
   }
- /* handleOldPasswordEmitted(value: string){
+  /*handleOldPasswordEmitted(value: string){
     if(!this.accountService.verifyPassoword(value))
       this.wrongPassword = true
     else{
@@ -64,6 +70,15 @@ export class AccountComponent {
         this.wrongPwconfirm = true
         break
       case 4:
+        const ver = JSON.parse(JSON.stringify(localStorage.getItem('user')))
+        const val = {
+          idUtenti: ver,
+          password: this.accountService.getPassword()
+        }
+        this.sub = this.http.put('http://localhost:23456/changePassword',val).subscribe(response => {
+          var tmp = JSON.parse(JSON.stringify(response))
+          console.log(tmp.toString())
+        }) 
         break
     }
     

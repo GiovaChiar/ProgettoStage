@@ -12,10 +12,13 @@
             <div class="border-end py-1">
                 <app-input-tile [title]="'genre'" (inputEmitter)="searchByGenre($event)"></app-input-tile>
             </div>
+            <div class="border-end py-1">
+                <button class="btn bg-transparent" (click)="sort()">SORT</button>
+            </div>
         </nav>
         <div class="d-flex flex-wrap justify-content-center align-items-start sc scrollspy-example">
             <div class="p-1" *ngFor="let book of books">
-                <a routerLink="{{book.isbn}}"><app-book-mask [author]="book.surname" [title]="book.title"></app-book-mask></a>
+                <a routerLink="{{book.ISBN}}"><app-book-mask [author]="book.SurnameWriter" [title]="book.Title"></app-book-mask></a>
             </div>
         </div>
     </div>

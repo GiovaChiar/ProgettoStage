@@ -7,14 +7,11 @@ import { response } from 'express';
 @Injectable({
   providedIn: 'root'
 })
-export class AccountService implements OnInit{
+export class AccountService{
   private passwordRem = false
   private password = ''
   private confirmPW = false
-  constructor(private http: HttpClient) { }
-  ngOnInit(): void {
-    //info user    
-  }
+  constructor() { }
   logout(){
     localStorage.removeItem('user')
   }
@@ -39,17 +36,10 @@ export class AccountService implements OnInit{
     else if(!this.confirmPW)
       return 3
     else{
-      const ver = JSON.parse(JSON.stringify(localStorage.getItem('user')))
-      var val = {
-        idUtenti: ver,
-        password: this.password
-      }
-      //localStorage.setItem('user', JSON.stringify(ver))
-      this.http.put('http://localhost:23456/modificaPassword',val).subscribe(response => {
-        var tmp = JSON.parse(JSON.stringify(response))
-        console.log(tmp.toString())
-      })
       return 4
     }
+  }
+  public getPassword(){
+    return this.password
   }
 }

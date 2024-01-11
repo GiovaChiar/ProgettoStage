@@ -7,67 +7,56 @@ import { response } from 'express';
 })
 export class RegistrationService {
   private user = {
-    username: '',
-    email: '',
-    name: '',
-    surname: '',
-    password: '',
+    Username: '',
+    Email: '',
+    NameUser: '',
+    SurnameUser: '',
+    Password: '',
   }
   getUser(){
     return this.user
   }
   private confirmpw = false
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
   setUsername(value: string) {
-    this.user.username = value
+    this.user.Username = value
   }
   setEmail(value: string) {
     if (value.toLocaleLowerCase().match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')) {
-      this.user.email = value
+      this.user.Email = value
       return true
     } else {
       return false
     }
   }
   setSurname(value: string) {
-    this.user.surname = value
+    this.user.SurnameUser = value
   }
   setName(value: string) {
-    this.user.name = value
+    this.user.NameUser = value
   }
   setPassword(value: string) {
-    this.user.password = value
+    this.user.Password = value
   }
   setConfirmPassword(value: string) {
-    this.confirmpw = this.user.password === value
+    this.confirmpw = this.user.Password === value
     return this.confirmpw
   }
   tryRegister() {
     var i = 1;
-    if (this.user.username === '')
+    if (this.user.Username === '')
       i = i * 2
-    if (this.user.email === '')
+    if (this.user.Email === '')
       i = i * 3
-    if (this.user.name === '')
+    if (this.user.NameUser === '')
       i = i * 5
-    if (this.user.surname === '')
+    if (this.user.SurnameUser === '')
       i = i * 7
-    if (this.user.password === '')
+    if (this.user.Password === '')
       i = i * 11
     if (!this.confirmpw)
       i = i * 13
-    if (i === 1) {
-      var res
-      this.http.post('http://localhost:23456/registrazione', this.user).subscribe(response => {
-        console.log(JSON.stringify(response))
-        var tmp = JSON.parse(JSON.stringify(response))
-        if (tmp.username !== '')
-          i = i * 17
-        if (tmp.email !== '')
-          i = i * 19
-      })
-    }
     return i;
   }
 }

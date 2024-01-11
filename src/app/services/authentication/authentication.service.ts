@@ -12,14 +12,14 @@ import { Subscription } from 'rxjs';
 })
 export class AuthenticationService implements OnDestroy {
   private user = new User('','','')
-  constructor(private http: HttpClient) { }
+  constructor() { }
   ngOnDestroy(): void {
     this.sub?.unsubscribe()
   }
   private sub: Subscription | undefined
   setEmail(value: string){
     if(value.toLocaleLowerCase().match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')){
-      this.user.email = value
+      this.user.Email = value
       return true
     }else{
       return false
@@ -29,18 +29,18 @@ export class AuthenticationService implements OnDestroy {
     return this.user
   }
   setUsername(value: string){
-    this.user.username = value
+    this.user.Username = value
     return true
   }
   setPassword(value: string){
-    this.user.password = value
+    this.user.Password = value
   }
   tryLogin(){
-    if((this.user.email === '' && this.user.username==='') && this.user.password === ''){
+    if((this.user.Email === '' && this.user.Username==='') && this.user.Password === ''){
       return 0;
-    }else if(this.user.password === ''){
+    }else if(this.user.Password === ''){
       return 1;
-    }else if(this.user.email === '' && this.user.username===''){
+    }else if(this.user.Email === '' && this.user.Username===''){
       return 2;
     }else{
       return 4;

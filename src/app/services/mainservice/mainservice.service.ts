@@ -5,48 +5,60 @@ import { ComponentFixtureNoNgZone } from '@angular/core/testing';
 import { Console } from 'console';
 import { response } from 'express';
 import { User } from '../../classes/user';
+import { type } from 'os';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MainserviceService{
-  private catInitied = false
-  private allBooks = [
-    new Book('0000000000000','Titolo','Nome','Cognome', 'Genere','Position','Lingua','Stato',0),
-  ]
-  constructor(private http: HttpClient) { }
+  private allBooks!: Book[]
+  private loanBooks !: Book[]
+  constructor() { }
 
   getBook(value: string){
     var book !: Book
     this.allBooks.forEach(element => {
-      if(element.isbn === value)
+      if(parseInt(element.ISBN)===parseInt(value))
+        book = element
+    });
+    console.log(book)
+    return book
+  }
+  getLoanBoolsks(value: string){
+    var book !: Book
+    this.loanBooks.forEach(element => {
+      if(parseInt(element.ISBN)===parseInt(value))
         book = element
     });
     console.log(book)
     return book
   }
   getAllBooks(){
-    if(!this.catInitied){
-    this.http.get('http://localhost:23456/listaLibri').subscribe(response=>{
-      console.log(response)
-      var tmp = JSON.parse(JSON.stringify(response))
-      tmp.forEach((el: { ISBN: string; Titolo: string; NomeAutore: string; CognomeAutore: string; Genere: string; PosizioneInLibreria: string; Lingua: string; })=>{
-        this.allBooks.push(new Book(el.ISBN,el.Titolo,el.NomeAutore,el.CognomeAutore,el.Genere,el.PosizioneInLibreria,el.Lingua,'Disponibile',1))
-      })
-    })
-      this.catInitied = true
-    }
-    this.sort(this.allBooks)
     return this.allBooks
   }
+  getLoanBooks(){
+    return this.loanBooks
+  }
+  setAllBooks(value: Book[]){
+    this.allBooks = value
+  }
+  setLoanBooks(value: Book[]){
+    this.loanBooks = value
+  }
+  sortCall(value: number){
+    if(value===1)
+      this.sort(this.allBooks)
+    else
+      this.sort(this.loanBooks)
+  }
   private sort(value: Book[]){
-    value.sort((a,b)=>{return a.title.localeCompare(b.title)})
+    value.sort((a,b)=>{return a.Title.localeCompare(b.Title)})
   }
   getByGenre(value: string){
     var ret: Book[]
     ret = []
     this.allBooks.forEach(book=>{
-      if(book.genre===value)
+      if(book.Type===value)
         ret.push(book)
     })
     this.sort(ret)
@@ -56,17 +68,7 @@ export class MainserviceService{
     var ret: Book[]
     ret = []
     this.allBooks.forEach(book=>{
-      if(book.surname.match(RegExp('^'+value)))
-        ret.push(book)
-    })
-    this.sort(ret)
-    return ret
-  }
-  getBystate(value: string){
-    var ret: Book[]
-    ret = []
-    this.allBooks.forEach(book=>{
-      if(book.state===value)
+      if(book.SurnameWriter.match(RegExp('^'+value)))
         ret.push(book)
     })
     this.sort(ret)
@@ -76,7 +78,7 @@ export class MainserviceService{
     var ret: Book[]
     ret = []
     this.allBooks.forEach(book=>{
-      if(book.title.match(RegExp('^'+value)))
+      if(book.Title.match(RegExp('^'+value)))
         ret.push(book)
     })
     this.sort(ret)
@@ -85,18 +87,18 @@ export class MainserviceService{
   rentBook(value: string){
     const ver = JSON.parse(JSON.stringify(localStorage.getItem('user')))
     var val = {
-      isbn: value,
-      idUtenti: ver
+      BookISBN: value,
+      userIdUser: ver
     }
-    this.http.post('http://localhost:23456/AggiuntaPrestiti',val)
+    return val
   }
   giveBack(value: string){
     const ver = JSON.parse(JSON.stringify(localStorage.getItem('user')))
     var val = {
-      isbn: value,
-      idUtenti: ver
+      BookISBN: value,
+      userIdUser: ver
     }
-    this.http.post('http://localhost:23456/AggiuntaPrestiti',val)
+    return val
   }
 }
 

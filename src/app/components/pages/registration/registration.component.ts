@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTileComponent } from "../../utils/input-tile/input-tile.component";
 import { ActivatedRoute, ActivationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { RegistrationService } from '../../../services/registration/registration.service';
 import { routes } from '../../../app.routes';
+import { HttpClient } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-registration',
@@ -12,7 +14,7 @@ import { routes } from '../../../app.routes';
     styleUrl: './registration.component.scss',
     imports: [CommonModule, InputTileComponent, RouterOutlet, RouterLink, RouterLinkActive],
 })
-export class RegistrationComponent {
+export class RegistrationComponent implements OnDestroy {
   email='email'
   wrongEmail = false
   messageEmail = ''
@@ -37,7 +39,12 @@ export class RegistrationComponent {
   wrongPwconfirm = false
   messagePwconfirm = 'passwords do not match'
 
-  constructor(private regService: RegistrationService, private router: Router){
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe()
+  }
+  private sub: Subscription | undefined
+
+  constructor(private regService: RegistrationService, private router: Router, private http: HttpClient){
   }
   handleUsernameEmitted(value: string){
     this.regService.setUsername(value)
@@ -98,28 +105,41 @@ export class RegistrationComponent {
       case 13:
         this.wrongPwconfirm = true
         break
-      case 17:
-        this.wrongUsername = true
-        this.messageUsername = 'Username already exist'
-        break
-      case 19:
-        this.wrongEmail = true
-        this.messageEmail = 'Email already used'
     }
   }
 
   registrationRequest(){
     var val = this.regService.tryRegister()
-    if(val===1)
-      this.router.navigate(['login'])
-    var cnt = 0
-    var list = [2,3,5,7,11,13,17,19]
-    while(val!==1 && list[cnt]!==null){
-      if(val%list[cnt]===0){
-        val = val/list[cnt]
-        this.modifyView(list[cnt])
+    if(val===1){
+      console.log(this.regService.getUser())
+      this.sub = this.http.post('http://localhost:23456/registration', this.regService.getUser()).subscribe(response => {
+        var wrong = false
+        console.log(JSON.stringify(response))
+        var tmp = JSON.parse(JSON.stringify(response))
+        if (tmp.username !== ''){
+          this.wrongUsername = true
+          this.messageUsername = 'Username already exist'
+          wrong = true
+        }
+        if (tmp.email !== ''){
+          this.wrongEmail = true
+          this.messageEmail = 'Email already used'
+          wrong = true
+        }
+        if(wrong){
+          this.router.navigate(['login'])
+        }
+      })
+    }else{
+      var cnt = 0
+      var list = [2,3,5,7,11,13]
+      while(val!==1 && list[cnt]!==null){
+        if(val%list[cnt]===0){
+          val = val/list[cnt]
+          this.modifyView(list[cnt])
+        }
+        ++cnt
       }
-      ++cnt
-    } 
+    }
   }
 }
