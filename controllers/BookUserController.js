@@ -65,26 +65,23 @@ const getLoan = async (req, res) => {
   }
 };
 
-    const deleteLoan = async (req, res) => {
-        const idBookUser = req.body.idBookUser;
+const deleteLoan = async (req, res) => { 
+  const userIdUser = req.params.userIdUser;
+  const BookISBN= req.params.BookISBN
 
-        try {
-          // Cerca il prestito con l'id specificato
-          const LoanToBeCancelled = await BookUser.findByPk(idBookUser);
-      
-          if (!LoanToBeCancelled) {
-            return res.status(404).send('Loan not found!');
-          }
-      
-          // Elimina il prestito
-          await LoanToBeCancelled.destroy();
-      
-          res.send('Loan successfully deleted');
-        } catch (error) {
-          console.error(error);
-          res.status(500).send('Internal server error');
-        }
-      };
+  try {
+  // Trova il prestito con l'id specificato
+  const loanToBeCancelled = await BookUser.findOne({ where: { userIdUser, BookISBN} });
+  
+  if (!loanToBeCancelled) {
+    return res.status(404).send('Loan not found!');
+  }
+  
+  // Elimina il prestito
+  await loanToBeCancelled.destroy();
+  
+  res.send('Loan successfully deleted');
+  } catch (errore) { console.error(errore); res.status(500).send('Errore interno del server'); } };
     
 
-module.exports = { addLoan,getLoan,deleteLoan};
+module.exports = { addLoan , getLoan ,deleteLoan};

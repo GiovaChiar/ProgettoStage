@@ -20,8 +20,8 @@ router.delete("/deleteBook", BooksController.deleteBooks)
 
 //router.post("/aggiuntaPrestito",BookUserController.bookUser )
 router.post("/addLoan",BookUserController.addLoan)
-router.get('/LoanList',BookUserController.getLoan);
-router.delete("/deleteLoan", BookUserController.deleteLoan);
+router.get('/LoanList/:userIdUser',BookUserController.getLoan);
+router.delete("/deleteLoan/:BookISBN/:userIdUser", BookUserController.deleteLoan);
 
 
 module.exports= router
