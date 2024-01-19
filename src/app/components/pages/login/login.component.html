@@ -1,16 +1,36 @@
-<!DOCTYPE html>
-<div class="h-100 d-flex align-items-center justify-content-center fixed">
-  <div class="border rounded border-top-start-0 border-dark p-3">
-    <div class="row d-flex justify-content-center py-1">
-        <app-input-tile [title]="id" [wrong]="wrongUsername" [message]="messageUsername" (inputEmitter)="handleUsernameEmitted($event)"></app-input-tile>
-        <button type="button" class="register" (click)="changeId()">change</button>
-    </div>
-    <div class="row py-1">
-      <app-input-tile [title]="pw" [type]="pw" [wrong]="wrongPassword" [message]="messagePassword" (inputEmitter)="handlePasswordEmitted($event)"></app-input-tile>
-    </div>
-    <div class="mx-auto d-flex justify-content-center py-2">
-      <button type="button" class="btn bg-transparent border rounded border-dark" (click)="loginRequest()" routerLink="/library">Login</button>
-      <button type="button" class="register" routerLink="/registration-page">Not registered, yet?</button>
-    </div>
+<section class="vh-100" style="background-color: #e4e0d8;"> 
+  <div class="container py-5 h-10"> 
+    <div class="row d-flex aware-content-center align -items-center h-100"> 
+      <div class="col col-xl-10"> 
+        <div class="card" style="border-radius: 5rem;"> 
+          <div class="row g-0" >
+             <div class="col-md-6 col-lg-5 d-flex align-items-center">
+               <div class="card-body p-10 p-lg-5 text-black ">
+                <form> 
+                  <div class="d-flex align-items-center mb-3 pb-1">
+                    <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
+                    <app-input-tile [title]="id" [wrong]="wrongUsername" [message]="messageUsername" (inputEmitter)="handleUsernameEmitted($event)"></app-input-tile>
+                  </div>
+  <div class="form-outline mb-4">
+    <app-input-tile [title]="pw" [type]="pw" [wrong]="wrongPassword" [message]="messagePassword" (inputEmitter)="handlePasswordEmitted($event)">
+    </app-input-tile>
   </div>
+
+  <div class="pt-1 mb-4">
+    <button class="btn btn-dark btn-lg btn-block" type="button" (click)="loginRequest()" routerLink="/library">Login</button>
+  </div>
+  <p class="mb-5 pb-lg-2" style="color: #0015ff;">Log in with your username<a href="#!" style="color: #ff0037;" (click)="changeId()" routerLink="/library">Change Log-in</a></p>
+  <p class="mb-5 pb-lg-2" style="color: #0015ff;">Don't have an account? <a href="#!" style="color: #ff0037;" routerLink="/registration-page">Register here</a></p>
+  
+</form>
 </div>
+</div>
+<div class="col-md-6 col-lg-5 d-none d-md-block">
+<img src="https://www.comune.benevento.it/portale/wp-content/uploads/2020/12/biblioteca-1.jpg" class="w-100" style="border-top-left-radius: .5rem; border-top-right-radius: .3rem;" alt="Sample photo"> 
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> </section>

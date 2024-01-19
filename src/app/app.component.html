@@ -1,18 +1,19 @@
-<!DOCTYPE html>
 <div class="fixed-top sticky-top">
-    <nav class="navbar position-relative navbar-expand-lg navbar-light border-bottom border-dark">
-        <div class="border-end" [ngStyle]="{'visibility':isLoggedIn()?'hidden':'visible'}">
-            <button class="btn bg-transparent" routerLink="/login" >LOGIN</button>
+    <nav class="navbar navbar-dark bg-dark navbar-expand">
+      <div class="navbar-nav">
+        <div class="border-end">
+            <button class="btn bg-blue nav-link login-text" routerLink="/login" *ngIf="!isLoggedIn()">LOGIN</button>
         </div>
         <div class="border-end">
-            <button class="btn bg-transparent" routerLink="/library">LIBRARY</button>
+          <button class="btn bg-blue nav-link library-text" routerLink="/library">LIBRARY</button>
         </div>
         <div class="">
-            <button class="btn bg-transparent" routerLink="/catalogue">CATALOGUE</button>
+          <button class="btn bg-blue nav-link catalogue-text" routerLink="/catalogue">CATALOGUE</button>
         </div>
-        <div class="border-start position-absolute end-0" [ngStyle]="{'visibility':isLoggedIn()?'visible':'hidden'}">
-            <button class="btn bg-transparent" routerLink="/account">ACCOUNT</button>
+        <div class="border-start position-absolute end-0" *ngIf="isLoggedIn()">
+          <button class="btn bg-blue nav-link login-text" routerLink="/account">ACCOUNT</button>
         </div>
+      </div>
     </nav>
-</div>
-<router-outlet></router-outlet>
+  </div>
+  <router-outlet></router-outlet>

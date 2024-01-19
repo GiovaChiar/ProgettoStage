@@ -1,17 +1,41 @@
-<!DOCTYPE html>
-<div class="ps-5 pe-2">
-    <div class="border-bottom border-dark p-2">
-        <button class="btn bg-transparent" (click)="logout()" routerLink="">LOGOUT</button>
-    </div>
-    <div class="border-bottom border-dark p-2">
-        <button class="btn bg-transparent" (click)="showUpdate()">Update Password</button>
-        <div *ngIf="changing; then thenBlock else elseBlock"></div>
-        <ng-template #thenBlock>
-            <div class="py-1"><app-input-tile [title]="'New Password'" (inputEmitter)="handleNewPasswordEmitted($event)" [type]="'password'" [message]="messagePwconfirm" [wrong]="wrongNewPassword" ></app-input-tile></div>
-            <div class="py-1"><app-input-tile class="py-1" [title]="'Confirm New Password'" (inputEmitter)="handleCorfirmPW($event)" [type]="'password'" [message]="messagePwconfirm" [wrong]="wrongPwconfirm"></app-input-tile></div>
-            <button class="btn bg-transparent border dark" (click)="changePassword()">Update Password</button>
-        </ng-template>
-        <ng-template #elseBlock>
-        </ng-template>
-    </div>
-</div>
+<section class="h-200 h-custom" style="background-color: #e4e0d8;">
+    <div class="container mt-8"> 
+        <div class="row d-flex justify-content-center"> 
+            <div class="col-md-7"> 
+                <div class="card p-3 py-4"> 
+                    <div class="text-center">
+                        <img src="https://banner2.cleanpng.com/20181231/fta/kisspng-computer-icons-user-profile-portable-network-graph-circle-svg-png-icon-free-download-5-4714-onli-5c2a3809d6e8e6.1821006915462707298803.jpg" width="200" class="rounded-circle">
+                        </div> 
+                        <div class="text-center mt-3">
+                            <span class="bg-secondary p-1 px-4 rounded text-white">Welcome to your profile</span> 
+                            <p></p>
+                            <div class="buttons"> 
+                                <button class="btn btn-primary px-4 ms-3 logout-text" (click)="logout()" routerLink="">LOGOUT</button>
+                                <button class="btn btn-outline-primary px-4"(click)="showUpdate()">Change Password</button> 
+                            </div> 
+                            <div class="ps-5 pe-2 mt-3">
+                                    <div *ngIf="changing; then thenBlock else elseBlock"></div> 
+                                    <ng-template #thenBlock> <div class="py-1"><app-input-tile [title]="'New Password'" 
+                                        (inputEmitter)="handleNewPasswordEmitted($event)" 
+                                        [type]="'password'" 
+                                        [message]="messagePwconfirm"
+                                        [wrong]="wrongNewPassword" >
+                                        </app-input-tile></div>
+                                        <div class="py-1">
+                                            <app-input-tile class="py-1" [title]="'Confirm New Password'" 
+                                            (inputEmitter)="handleCorfirmPW($event)"
+                                            [type]="'password'" [message]="messagePwconfirm" 
+                                            [wrong]="wrongPwconfirm">
+                                            </app-input-tile>
+                                        </div>
+                                        <button class="btn bg-transparent border dark" (click)="changePassword()">Update Password</button>
+                                        </ng-template> 
+                                        <ng-template #elseBlock> 
+
+                                        </ng-template>
+                                        </div>
+                                        </div>
+                                        </div>
+                                        </div>
+                                        </div> 
+                                        </div>

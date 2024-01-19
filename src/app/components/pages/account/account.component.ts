@@ -36,13 +36,7 @@ export class AccountComponent {
     this.accountService.logout()
     this.route.navigate(['catalogue'])
   }
-  /*handleOldPasswordEmitted(value: string){
-    if(!this.accountService.verifyPassoword(value))
-      this.wrongPassword = true
-    else{
-      this.wrongPassword = false
-    }
-  }*/
+ 
   handleNewPasswordEmitted(value: string){
     this.accountService.setPassword(value)
   }
@@ -72,8 +66,8 @@ export class AccountComponent {
       case 4:
         const ver = JSON.parse(JSON.stringify(localStorage.getItem('user')))
         const val = {
-          idUtenti: ver,
-          password: this.accountService.getPassword()
+          idUser: ver,
+          Password: this.accountService.getPassword()
         }
         this.sub = this.http.put('http://localhost:23456/changePassword',val).subscribe(response => {
           var tmp = JSON.parse(JSON.stringify(response))
