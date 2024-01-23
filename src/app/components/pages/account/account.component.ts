@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { InputTileComponent } from "../../utils/input-tile/input-tile.component";
 import { AccountService } from '../../../services/account/account.service';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import { InformationEvent } from 'http';
+import { Info } from '../../../classes/info';
 
 @Component({
     selector: 'app-account',
@@ -13,7 +15,9 @@ import { Subscription } from 'rxjs';
     styleUrl: './account.component.scss',
     imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, InputTileComponent]
 })
-export class AccountComponent {
+export class AccountComponent implements OnDestroy, OnInit {
+
+  info !: Info
 
   changing = false
 
@@ -32,6 +36,10 @@ export class AccountComponent {
   private sub: Subscription | undefined
 
   constructor(private route: Router,private accountService: AccountService, private http: HttpClient){}
+  ngOnInit(): void {
+    this.info = this.accountService.getInfo()
+    console.log(this.info)
+  }
   logout(){
     this.accountService.logout()
     this.route.navigate(['catalogue'])

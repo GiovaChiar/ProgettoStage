@@ -5,13 +5,14 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-login',
     standalone: true,
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss',
-    imports: [CommonModule, InputTileComponent, RouterOutlet, RouterLink, RouterLinkActive],
+    imports: [NgbDropdownModule, CommonModule, InputTileComponent, RouterOutlet, RouterLink, RouterLinkActive],
     providers: [HttpClientModule, AuthenticationService]
 })
 export class LoginComponent implements OnDestroy{
@@ -80,15 +81,19 @@ export class LoginComponent implements OnDestroy{
           var tmp = JSON.parse(JSON.stringify(response))
           if(tmp instanceof Object){
             localStorage.setItem('user',JSON.stringify(tmp.idUser))
+            localStorage.setItem('info',JSON.stringify(tmp))
             this.route.navigate(['library'])
           }else{
             this.wrongPassword = true;
-        this.wrongUsername = true;
-        this.messageUsername = "wrong credentials"
-        this.messagePassword = "wrong credentials"
+            this.wrongUsername = true;
+            this.messageUsername = "wrong credentials"
+            this.messagePassword = "wrong credentials"
           }
         })
         break
+        case 5:
+          this.route.navigate(['admin'])
+          break
     }
   }
 

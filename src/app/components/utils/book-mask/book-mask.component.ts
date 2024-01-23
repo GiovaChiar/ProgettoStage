@@ -11,7 +11,9 @@ import { INITIAL_CONFIG } from '@angular/platform-server';
   styleUrl: './book-mask.component.scss'
 })
 export class BookMaskComponent {
-  @Input() title!: string
+  @Input() title !: string
   @Input() author !: string
+  @Input() name !: string
+  @Input() genre !: string
   constructor(){}
 }

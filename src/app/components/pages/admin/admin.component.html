@@ -1,15 +1,45 @@
 <!DOCTYPE html>
-<div>
-    <app-input-tile [title]="'title'" (inputEmitter)="handleTitle($event)"></app-input-tile>
-    <app-input-tile [title]="'ISBN'" (inputEmitter)="handleIsbn($event)"></app-input-tile>
-    <app-input-tile [title]="'surname'" (inputEmitter)="handleSurname($event)"></app-input-tile>
-    <app-input-tile [title]="'genre'" (inputEmitter)="handleGenre($event)"></app-input-tile>
-    <app-input-tile [title]="'language'" (inputEmitter)="handleLanguage($event)"></app-input-tile>
-    <app-input-tile [title]="'position'" (inputEmitter)="handlePosition($event)"></app-input-tile>
-    <app-input-tile [title]="'copies'" (inputEmitter)="handleCopies($event)"></app-input-tile>
-    <button (click)="addBook()">ADD BOOK</button>
+<div class="p-2">
+    <div class="pb-2 d-flex justify-content-center">
+        <app-input-tile [title]="'title'" [message]="message" [wrong]="wrongTitle" (inputEmitter)="handleTitle($event)"></app-input-tile>
+    </div>
+    <div class="py-2 d-flex justify-content-center">
+        <app-input-tile [title]="'ISBN'" [message]="message" [wrong]="wrongIsbn" (inputEmitter)="handleIsbn($event)"></app-input-tile>
+    </div>
+    <div class="py-2 d-flex justify-content-center">
+        <app-input-tile  [title]="'surname'" [message]="message" [wrong]="wrongSurname" (inputEmitter)="handleSurname($event)"></app-input-tile>
+    </div>
+    <div class="py-2 d-flex justify-content-center">
+        <app-input-tile  [title]="'name'" [message]="message" [wrong]="wrongName" (inputEmitter)="handleSurname($event)"></app-input-tile>
+    </div>
+    <div class="py-2 d-flex justify-content-center">
+        <app-input-tile  [title]="'genre'" [message]="message" [wrong]="wrongGerne" (inputEmitter)="handleGenre($event)"></app-input-tile>
+    </div>
+    <div class="py-2 d-flex justify-content-center">
+        <app-input-tile [title]="'language'" [message]="message" [wrong]="wrongLanguage" (inputEmitter)="handleLanguage($event)"></app-input-tile>
+    </div>
+    <div class="py-2 d-flex justify-content-center">
+        <app-input-tile [title]="'position'" [message]="message" [wrong]="wrongPosition" (inputEmitter)="handlePosition($event)"></app-input-tile>
+    </div>
+    <div class="py-2 d-flex justify-content-center">
+        <app-input-tile [title]="'copies'" [message]="message" [wrong]="wrongCopies" (inputEmitter)="handleCopies($event)"></app-input-tile>
+    </div>
+    <div class="d-flex justify-content-center">
+        <button  (click)="addBook()">ADD BOOK</button>
+    </div>
 </div>
 <div>
     <app-input-tile [title]="'ISBN TO REMOVE'" (inputEmitter)="handleRemove($event)"></app-input-tile>
     <button (click)="removeBook()">REMOVE BOOK</button>
+</div>
+<div>
+    <app-input-tile [title]="'username'" (inputEmitter)="handleUsername($event)"></app-input-tile>
+    <div>
+        <div *ngFor="let user of users">
+            <div>
+                <p>{{user.idUser}} {{user.Username}}</p>
+                <button (click)="removeUser(user.idUser)">delete</button>
+            </div>
+        </div>
+    </div>
 </div>

@@ -9,16 +9,18 @@ import { InputTileComponent } from '../../utils/input-tile/input-tile.component'
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { ColdObservable } from 'rxjs/internal/testing/ColdObservable';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-library',
     standalone: true,
     templateUrl: './library.component.html',
     styleUrl: './library.component.scss',
-    imports: [CommonModule, BookMaskComponent, BookpageComponent, RouterOutlet, RouterLink, RouterLinkActive, InputTileComponent]
+    imports: [CommonModule, BookMaskComponent, NgbDropdownModule, BookpageComponent, RouterOutlet, RouterLink, RouterLinkActive, InputTileComponent]
 })
 export class LibraryComponent implements OnInit, OnDestroy{
   books!: Book[]
+  field = 'Title'
   ngOnDestroy(): void {
     this.sub?.unsubscribe()
   }
@@ -33,14 +35,17 @@ export class LibraryComponent implements OnInit, OnDestroy{
       }
       console.log(userIdUser)
       this.http.get('http://localhost:23456/LoanList/'+userIdUser.userIdUser).subscribe(response=>{
-        console.log(response)
-        var tmp = JSON.parse(JSON.stringify(response))
-        tmp.forEach((el: { BookISBN: string; Book: {Title: string; NameWriter: string; SurnameWriter: string; Type: string; LocationInLibrary: string; Language: string;NumberOfCopies: number}})=>{
-          this.books.push(new Book(el.BookISBN,/*'','','','','','',1*/el.Book.Title,el.Book.NameWriter,el.Book.SurnameWriter,el.Book.Type,el.Book.LocationInLibrary,el.Book.Language,el.Book.NumberOfCopies))
-       })
+          console.log(response)
+          var tmp = JSON.parse(JSON.stringify(response))
+          tmp.forEach((el: { BookISBN: string; Book: {Title: string; NameWriter: string; SurnameWriter: string; Type: string; LocationInLibrary: string; Language: string;NumberOfCopies: number;};createdAt:Date})=>{
+            this.books.push(new Book(el.BookISBN,el.Book.Title,el.Book.NameWriter,el.Book.SurnameWriter,el.Book.Type,el.Book.LocationInLibrary,el.Book.Language,el.Book.NumberOfCopies, el.createdAt))
+          })
        this.mainService.setLoanBooks(this.books)
       })
-        }
+    }
+  }
+  searchByGenre(value: string){
+    this.books = this.mainService.getByGenre(value)
   }
   searchByTitle(value: string){
     this.books = this.mainService.getByTitle(value);
@@ -51,5 +56,9 @@ export class LibraryComponent implements OnInit, OnDestroy{
   sort(){
     this.mainService.sortCall(0)
     this.books = this.mainService.getLoanBooks()
+  }
+  
+  changeField(value: string){
+    this.field = value
   }
 }

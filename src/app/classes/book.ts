@@ -8,6 +8,7 @@ export class Book {
         public Type: string, 
         public LocationInLibrary: string,
         public Language: string,
-        public NumberOfCopies: number
+        public NumberOfCopies: number,
+        public createdAt: Date
         ) {}
   }

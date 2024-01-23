@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-
-<div class="card text-center border-dark" style="width: 10rem;">
-    <img class="card-img-top" src="../../../../assets/img/img.jpg">
-    <div class="card-body border-dark">
-        <h5 class="card-title">{{title}}</h5>
-        <h6 class="card-subtilte text-muted">{{author}}</h6>
+    <div class="card text-dark card-has-bg click-col" style="width: 10rem; background-image:path('../../../../assets/img/{{genre}}.jpg');">
+        <img class="card-img d-none" src="../../../../assets/img/{{genre}}.jpg">
+        <div class="card-img-overlay d-flex flex-column">
+            <div class="card-body">
+                <h4 class="card-title mt-0 text-dark">{{title}}</h4>
+                <small>{{genre}}</small>
+            </div>
+            <div class="card-footer">
+                <h6 class="my-0 text-dark d-block">{{name}}</h6>
+                <small>{{author}}</small>
+            </div>
+        </div>
     </div>
-</div>

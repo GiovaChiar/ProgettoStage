@@ -3,6 +3,8 @@ import { Book } from '../../classes/book';
 import { User } from '../../classes/user';
 import { HttpClient } from '@angular/common/http';
 import { response } from 'express';
+import { info } from 'console';
+import { Info } from '../../classes/info';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +16,7 @@ export class AccountService{
   constructor() { }
   logout(){
     localStorage.removeItem('user')
+    localStorage.removeItem('info')
   }
  /*verifyPassoword(value: string){
     var ver!: User
@@ -41,5 +44,10 @@ export class AccountService{
   }
   public getPassword(){
     return this.password
+  }
+  public getInfo(){
+   const vel =  JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('info'))))
+   console.log(vel)
+   return new Info( vel.Username, vel.Email, vel.NameUser,vel.SurnameUser)
   }
 }

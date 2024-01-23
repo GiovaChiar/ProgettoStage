@@ -1,20 +1,27 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Book } from '../../classes/book';
+import { User } from '../../classes/user';
+import { Info } from '../../classes/info';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AdiminService {
-  private book = new Book('', '', '', '', '','', '', '', 0)
+export class AdiminService{
+  private book = new Book('', '', '', '', '','','',0,new Date())
   private delBook = ''
-  constructor() { }
+  private delUser = ''
+  private users !: Info[]
+  constructor(){}
 
   setTitle(value: string){
     this.book.Title = value
   }
   setSurname(value: string){
     this.book.SurnameWriter = value
+  }
+  setName(value: string){
+    this.book.NameWriter = value
   }
   setIsbn(value: string){
     this.book.ISBN = value
@@ -23,7 +30,7 @@ export class AdiminService {
     this.book.Type = value
   }
   setState(value: string){
-    this.book.state = value
+    this.book.LocationInLibrary = value
   }
   setPosition(value: string){
     this.book.LocationInLibrary = value
@@ -38,11 +45,20 @@ export class AdiminService {
   setIsbnRem(value: string){
     this.delBook = value
   }
+  setUsers(value: Info[]){
+    this.users = value
+  }
   getDelBook(){
     return this.delBook
   }
   getBook(){
     return this.book
+  }
+  getDelUser(){
+    return this.delUser
+  }
+  getUsers(){
+    return this.users
   }
   addBook(){
     var i = 1
@@ -60,13 +76,24 @@ export class AdiminService {
       i = i*13
     if(this.book.Type==='')
       i = i*17
+    if(this.book.NameWriter==='')
+      i = i*19
     return i
   }
   removeBook(){
-    if(this.delBook!==''){
+    if(this.delBook===''){
       return 0
     }else{
       return 1
     }
+  }
+  searchUser(value: String){
+    var ret: Info[]
+    ret = []
+    this.users.forEach(user=>{
+      if(user.Username.match(RegExp('^'+value)))
+        ret.push(user)
+    })
+    return ret
   }
 }
