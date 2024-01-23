@@ -48,6 +48,6 @@ export class AccountService{
   public getInfo(){
    const vel =  JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('info'))))
    console.log(vel)
-   return new Info( vel.Username, vel.Email, vel.NameUser,vel.SurnameUser)
+   return new Info( vel.idUser, vel.Username, vel.Email, vel.NameUser,vel.SurnameUser)
   }
 }
