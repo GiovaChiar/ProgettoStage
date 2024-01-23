@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('.');
-const Books= require("../models/books")
+const Books= require("./books")
 const User = require("../models/user")
 
 const BookUser = sequelize.define('BookUser', {
@@ -9,7 +9,7 @@ const BookUser = sequelize.define('BookUser', {
     allowNull: false,
     primaryKey: true,
     autoIncrement: true
-},
+  },
 });
 
 // Definisci le associazioni separatamente, specificando i nomi delle colonne personalizzati

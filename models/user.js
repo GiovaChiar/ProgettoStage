@@ -24,18 +24,18 @@ module.exports= (sequelize, DataTypes) => {
                 notEmpty: true
               }
             },
-            Password:{
-                type: DataTypes.STRING,
-                allowNull: false, 
-            },
-            NameUser:{
-                type: DataTypes.STRING,
-                allowNull: false, 
-            },
-            SurnameUser: {
-                type: DataTypes.STRING,
-                allowNull: false, 
-            }
+        Password:{
+            type: DataTypes.STRING,
+            allowNull: false, 
+        },
+        NameUser:{
+            type: DataTypes.STRING,
+            allowNull: false, 
+        },
+        SurnameUser: {
+            type: DataTypes.STRING,
+            allowNull: false, 
+        }
     })
     Users.findByPk = async function (idUser) {
         return this.findOne({ where: { idUser: idUser } });
