@@ -1,12 +1,11 @@
 const db = require('../models')
 const { Sequelize } = require('sequelize');
 
-// create main models
 
+// create main models
 const User= db.USER
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-
 
 //main works 
 
@@ -80,7 +79,7 @@ const addUser = async (req, res) => {
              [Sequelize.Op.or]: [
              { username: Username },
              { email: Email }
-            ]
+            ] 
           }
         });
         if (!user) {
@@ -96,21 +95,20 @@ const addUser = async (req, res) => {
              res.status(401).send(error.message);
         }
         };
-
-// DELETE DI UN UTENTE TRAMITE ID
-    const deleteUser= async (req,res)=>{
-        const idUser= req.body.idUser
-        await User.destroy({where: {idUser:req.body.idUser}})
-        res.status(200).json({message:'Delete User successfully'})
-    }
+        
+        const deleteUser= async (req,res)=>{
+            const idUser= req.params.idUser
+            await User.destroy({where: {idUser:req.params.idUser}})
+            res.status(200).json({message:'Delete User successfully'})
+        }
 
 // update password Utenti
 const cambioPassword = async (req, res) => {
-    const { Username, Email, Password } = req.body;
+    const { idUser, Password } = req.body;
 
     try {
         // Cerca l'utente
-        const user = await User.findOne({ where: { Username, Email } });
+        const user = await User.findOne({ where: { idUser } });
 
         if (!user) {
             throw new Error('User not found');

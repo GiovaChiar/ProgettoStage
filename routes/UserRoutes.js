@@ -10,15 +10,14 @@ router.post("/registration", UsersController.addUser)
 router.post("/login", UsersController.login)
 router.put("/changePassword", UsersController.cambioPassword)
 router.get("/UserList", UsersController.getAllUser)
-router.delete("/deleteUser", UsersController.deleteUser)
+router.delete("/deleteUser/:idUser", UsersController.deleteUser)
 
 // Route for books
 router.post("/registrationBook",BooksController.addBook)
 router.get("/BookList", BooksController.getAllBooks)
-router.delete("/deleteBook", BooksController.deleteBooks)
+router.delete("/deleteBook/:ISBN", BooksController.deleteBooks)
 
-
-//router.post("/aggiuntaPrestito",BookUserController.bookUser )
+//Route for many2many (user-books)
 router.post("/addLoan",BookUserController.addLoan)
 router.get('/LoanList/:userIdUser',BookUserController.getLoan);
 router.delete("/deleteLoan/:BookISBN/:userIdUser", BookUserController.deleteLoan);

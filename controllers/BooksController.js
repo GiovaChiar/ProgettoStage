@@ -4,7 +4,6 @@ const db = require('../models')
 
 const Books= db.Books
 
-
 //main works 
 
 const Op = require('sequelize').Op;
@@ -49,10 +48,10 @@ const getAllBooks= async (req,res)=> {
 
 // DELETE TRAMITE ISBN DIMINUENDO IL NUMERO DI COPIE (DA DECIDERE SE CANCELLARE DOPO TUTTO IL RECORD O SETTARLO A 0)
 const deleteBooks = async (req, res) => {
-    const ISBN  = req.body;
+    const ISBN = req.params.ISBN;
     
     try {
-        const book = await Books.findOne({ where: { ISBN: req.body.ISBN } });
+        const book = await Books.findOne({ where: { ISBN: ISBN } });
         if (!book) {
             return res.status(404).json({ message: "Book not found" });
         }
@@ -67,7 +66,7 @@ const deleteBooks = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
-    };
+    };  
 
 module.exports= {
     addBook,

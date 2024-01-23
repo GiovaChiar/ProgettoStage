@@ -43,7 +43,7 @@ const addLoan = async (req, res) => {
 };
 
 const getLoan = async (req, res) => { 
-  const { userIdUser } = req.body;
+  const { userIdUser } = req.params;
   try {
     const loans = await BookUser.findAll({
       where: { userIdUser: userIdUser},
