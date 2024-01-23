@@ -147,8 +147,7 @@ export class AdminComponent implements  OnInit,OnDestroy{
     }
   }
   handleUsername(value:string){
-    this.adminService.searchUser(value)
-    this.users = this.adminService.getUsers()
+    this.users = this.adminService.searchUser(value)
   }
   removeUser(value: string){
     console.log(value)
