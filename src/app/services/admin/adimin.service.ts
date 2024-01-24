@@ -39,8 +39,9 @@ export class AdiminService{
     this.book.Language = value
   }
   setCopies(value: string){
-    this.book.NumberOfCopies = parseInt(value)
-  }
+  this.book.NumberOfCopies = parseInt(value)
+    console.log(this.book.NumberOfCopies)
+}
 
   setIsbnRem(value: string){
     this.delBook = value
@@ -72,7 +73,7 @@ export class AdiminService{
       i = i*7
     if(this.book.LocationInLibrary==='')
       i = i*11
-    if(this.book.NumberOfCopies=0)
+    if(this.book.NumberOfCopies===0)
       i = i*13
     if(this.book.Type==='')
       i = i*17

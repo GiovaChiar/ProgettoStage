@@ -34,23 +34,24 @@ export class AdminComponent implements  OnInit,OnDestroy{
   wrongLanguage = false
   wrongCopies = false
 
-
-  ngOnInit(): void {
-    
+  private getAllUser(){
     this.users = this.adminService.getUsers();
     if(this.users === undefined){
       this.users =[]
       this.sub = this.http.get('http://localhost:23456/UserList').subscribe(response=>{
         var tmp = JSON.parse(JSON.stringify(response))
-        console.log(tmp)
         tmp.forEach((el: {idUser: string, Username: string, NameUser: string, SurnameUser: string, Email: string})=>{
           this.users.push(new Info(el.idUser,el.Username,el.Email,el.NameUser,el.SurnameUser,))
         })
-        console.log(tmp)
         this.adminService.setUsers(this.users)
       })
     }
+}
+
+  ngOnInit(): void {
+    this.getAllUser()
   }
+
   ngOnDestroy(): void {
     this.sub?.unsubscribe()
   }
@@ -147,8 +148,7 @@ export class AdminComponent implements  OnInit,OnDestroy{
     }
   }
   handleUsername(value:string){
-    this.adminService.searchUser(value)
-    this.users = this.adminService.getUsers()
+    this.users = this.adminService.searchUser(value)
   }
   removeUser(value: string){
     console.log(value)
@@ -158,5 +158,17 @@ export class AdminComponent implements  OnInit,OnDestroy{
         console.log(tmp)
       }
     )
+    setTimeout(() => {
+      this.users= []
+      this.sub = this.http.get('http://localhost:23456/UserList').subscribe(response=>{
+        var tmp = JSON.parse(JSON.stringify(response))
+        tmp.forEach((el: {idUser: string, Username: string, NameUser: string, SurnameUser: string, Email: string})=>{
+          this.users.push(new Info(el.idUser,el.Username,el.Email,el.NameUser,el.SurnameUser,))
+        })
+        this.adminService.setUsers(this.users)
+      })
+    }, 1000);
+
   }
-}
+  }
+
