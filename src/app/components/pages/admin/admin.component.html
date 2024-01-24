@@ -1,14 +1,15 @@
     <section class="vh-100" style="background-color: #e4e0d8;"> 
         <link rel="stylesheet" href="admin.component.scss"> 
         <div class="p-2"> 
-            <h1 class="text-center text-danger"> Welcome to admin page</h1> 
+            <h1 class="text-center"> Welcome to admin page</h1> 
+        <br/>
+        <br/> 
             <div class="pb-2 d-flex justify-content-center"> 
                 <app-input-tile [title]="'title'" [message]="message" [wrong]="wrongTitle" (inputEmitter)="handleTitle($event)" class="red-title"> 
                 </app-input-tile> 
             </div> 
             <div class="py-2 d-flex justify-content-center"> 
-                <app-input-tile [title]="'ISBN'" [message]="message" [wrong]="wrongIsbn" (inputEmitter)="handleIsbn($event)" class="red-title">
-                </app-input-tile>
+                <app-input-tile [title]="'ISBN'" [message]="message" [wrong]="wrongIsbn" (inputEmitter)="handleIsbn($event)" class="red-title"></app-input-tile>
                 </div> 
                 <div class="py-2 d-flex justify-content-center">
                     <app-input-tile [title]="'surname'" [message]="message" [wrong]="wrongSurname" (inputEmitter)="handleSurname($event)" class="red-title"> 

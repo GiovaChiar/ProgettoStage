@@ -7,6 +7,7 @@ import { Subscription, combineLatest } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { OnReadOpts } from 'net';
 import { Info } from '../../../classes/info';
+import Swal from 'sweetalert2'; // Importa la libreria SweetAlert
 
 @Component({
     selector: 'app-admin',
@@ -55,8 +56,18 @@ export class AdminComponent implements  OnInit,OnDestroy{
   ngOnDestroy(): void {
     this.sub?.unsubscribe()
   }
-  handleIsbn(value: string){
-    this.adminService.setIsbn(value)
+  handleIsbn(isbn: string) {
+    if (isbn.length !== 13) {
+      this.adminService.setIsbn("")
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid ISBN',
+        text: 'The ISBN must be 13 characters long',
+      });
+    } else {
+      this.adminService.setIsbn(isbn)
+      this.wrongIsbn=false
+    }
   }
   handleTitle(value: string){
     this.adminService.setTitle(value)
@@ -92,6 +103,7 @@ export class AdminComponent implements  OnInit,OnDestroy{
       this.sub = this.http.post('http://localhost:23456/registrationBook',this.adminService.getBook()).subscribe(response => {
         var tmp = JSON.parse(JSON.stringify(response))
         console.log(tmp.toString())
+        alert('Il libro è stato registrato!');
       })
     }else{
       var cnt = 0
