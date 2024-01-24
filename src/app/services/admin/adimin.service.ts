@@ -3,12 +3,13 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Book } from '../../classes/book';
 import { User } from '../../classes/user';
 import { Info } from '../../classes/info';
+import { BookToAdd } from '../../classes/booktoAdd';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdiminService{
-  private book = new Book('', '', '', '', '','','',0,new Date())
+  private book = new BookToAdd('', '', '', '', '','','',0)
   private delBook = ''
   private delUser = ''
   private users !: Info[]
