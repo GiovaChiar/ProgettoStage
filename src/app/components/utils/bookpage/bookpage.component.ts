@@ -26,10 +26,8 @@ export class BookpageComponent implements OnInit,OnDestroy{
     this.subhttp?.unsubscribe()
   }
   ngOnInit(): void {
-    console.log(this.route.url)
     this.sub = this.route.paramMap.subscribe((param: ParamMap)=>{
-      console.log(this.route.url)
-      if(this.route.snapshot.outlet.match('catalogue'))
+      if(this.route.parent?.toString().match('catalogue'))
         {var id = this.route.snapshot.paramMap.get('id')! 
         this.book = this.mainservice.getBook(id)}else
       {var id = this.route.snapshot.paramMap.get('id')! 
