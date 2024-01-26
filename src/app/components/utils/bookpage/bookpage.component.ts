@@ -26,9 +26,14 @@ export class BookpageComponent implements OnInit,OnDestroy{
     this.subhttp?.unsubscribe()
   }
   ngOnInit(): void {
+    console.log(this.route.url)
     this.sub = this.route.paramMap.subscribe((param: ParamMap)=>{
-      var id = this.route.snapshot.paramMap.get('id')!
-      this.book = this.mainservice.getBook(id)
+      console.log(this.route.url)
+      if(this.route.snapshot.outlet.match('catalogue'))
+        {var id = this.route.snapshot.paramMap.get('id')! 
+        this.book = this.mainservice.getBook(id)}else
+      {var id = this.route.snapshot.paramMap.get('id')! 
+      this.book = this.mainservice.getLoanBoolsks(id)}
     })
   }
   getLogin(){
@@ -41,6 +46,23 @@ export class BookpageComponent implements OnInit,OnDestroy{
     }else
       return false
   }
+
+  libraryOrCat(){
+    if(this.book.createdAt===undefined){
+      return false
+    }else{
+      return true
+    }
+  }
+
+  stateOfLoan(){
+    if(this.book.createdAt!==undefined){
+      return Math.floor(Date.now() - this.book.createdAt.getMilliseconds()/ 1000*3600*24*2) 
+    }else{
+      return -1
+    }
+  }
+
   rentBook(){
     this.subhttp = this.http.post('http://localhost:23456/addLoan',this.mainservice.rentBook(this.book.ISBN)).subscribe(response=>{
       var tmp = JSON.parse(JSON.stringify(response))

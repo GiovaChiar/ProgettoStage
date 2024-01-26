@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { OnReadOpts } from 'net';
 import { Info } from '../../../classes/info';
 import Swal from 'sweetalert2'; // Importa la libreria SweetAlert
+import { Book } from '../../../classes/book';
 
 @Component({
     selector: 'app-admin',
@@ -19,6 +20,7 @@ import Swal from 'sweetalert2'; // Importa la libreria SweetAlert
 export class AdminComponent implements  OnInit,OnDestroy{
   private sub: Subscription | undefined
   users !: Info[]
+  books !: Book[]
   constructor(private adminService: AdiminService, private http: HttpClient){}
  
   message = "missing field"
@@ -35,22 +37,33 @@ export class AdminComponent implements  OnInit,OnDestroy{
   wrongLanguage = false
   wrongCopies = false
 
+  private getAllBook(){
+    this.books = []
+     this.sub = this.http.get('http://localhost:23456/BookList').subscribe(response=>{
+       var tmp = JSON.parse(JSON.stringify(response))
+       console.log(tmp)
+       tmp.forEach((el: { ISBN: string; Title: string; NameWriter: string; SurnameWriter: string; Type: string; LocationInLibrary: string; Language: string;NumberOfCopies: number;createdAt: Date;})=>{
+         this.books.push(new Book(el.ISBN,el.Title,el.NameWriter,el.SurnameWriter,el.Type,el.LocationInLibrary,el.Language,el.NumberOfCopies,el.createdAt))
+       })
+       this.adminService.setBooks(this.books)
+      })
+  }
+
   private getAllUser(){
     this.users = this.adminService.getUsers();
-    if(this.users === undefined){
-      this.users =[]
-      this.sub = this.http.get('http://localhost:23456/UserList').subscribe(response=>{
-        var tmp = JSON.parse(JSON.stringify(response))
-        tmp.forEach((el: {idUser: string, Username: string, NameUser: string, SurnameUser: string, Email: string})=>{
-          this.users.push(new Info(el.idUser,el.Username,el.Email,el.NameUser,el.SurnameUser,))
-        })
-        this.adminService.setUsers(this.users)
+    this.users =[]
+    this.sub = this.http.get('http://localhost:23456/UserList').subscribe(response=>{
+      var tmp = JSON.parse(JSON.stringify(response))
+      tmp.forEach((el: {idUser: string, Username: string, NameUser: string, SurnameUser: string, Email: string})=>{
+        this.users.push(new Info(el.idUser,el.Username,el.Email,el.NameUser,el.SurnameUser,))
       })
-    }
-}
+      this.adminService.setUsers(this.users)
+    })
+  }
 
   ngOnInit(): void {
     this.getAllUser()
+    this.getAllBook()
   }
 
   ngOnDestroy(): void {
@@ -97,6 +110,7 @@ export class AdminComponent implements  OnInit,OnDestroy{
   handleRemove(value: string){
     this.adminService.setIsbnRem(value)
   }
+  
   addBook(){
     var val = this.adminService.addBook()
     if( val === 1){
@@ -105,9 +119,12 @@ export class AdminComponent implements  OnInit,OnDestroy{
         console.log(tmp.toString())
         alert('Il libro è stato registrato!');
       })
+      setTimeout(() => {
+        this.getAllBook()
+      }, 1000);
     }else{
       var cnt = 0
-      var list = [2,3,5,7,11,13]
+      var list = [2,3,5,7,11,13,17,19]
       while(val!==1 && list[cnt]!==null){
         if(val%list[cnt]===0){
           val = val/list[cnt]
@@ -153,9 +170,12 @@ export class AdminComponent implements  OnInit,OnDestroy{
       case 1:
         console.log(this.adminService.getDelBook())
         this.sub = this.http.delete('http://localhost:23456/deleteBook/'+this.adminService.getDelBook()).subscribe(response => {
-        var tmp = JSON.parse(JSON.stringify(response))
-        console.log(tmp)
-      })
+          var tmp = JSON.parse(JSON.stringify(response))
+          console.log(tmp)
+        })
+        setTimeout(() => {
+          this.getAllBook()
+        }, 1000);
         break
     }
   }
@@ -171,16 +191,23 @@ export class AdminComponent implements  OnInit,OnDestroy{
       }
     )
     setTimeout(() => {
-      this.users= []
-      this.sub = this.http.get('http://localhost:23456/UserList').subscribe(response=>{
-        var tmp = JSON.parse(JSON.stringify(response))
-        tmp.forEach((el: {idUser: string, Username: string, NameUser: string, SurnameUser: string, Email: string})=>{
-          this.users.push(new Info(el.idUser,el.Username,el.Email,el.NameUser,el.SurnameUser,))
-        })
-        this.adminService.setUsers(this.users)
-      })
+      this.getAllUser()
     }, 1000);
+  }
 
+  removeBookClick(value: string){
+    this.sub = this.http.delete('http://localhost:23456/deleteBook/'+value).subscribe(response => {
+        var tmp = JSON.parse(JSON.stringify(response))
+        console.log(tmp)
+      })
+    setTimeout(() => {
+      this.getAllBook()
+    }, 1000);
   }
+  
+  handleTitleSearch(value: string){
+    this.books=this.adminService.searchBook(value)
   }
+
+}
 

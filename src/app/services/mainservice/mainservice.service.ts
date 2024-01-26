@@ -68,7 +68,7 @@ export class MainserviceService{
     var ret: Book[]
     ret = []
     this.allBooks.forEach(book=>{
-      if(book.SurnameWriter.match(RegExp('^'+value)))
+      if(book.SurnameWriter.match(RegExp('^'+value,'i')))
         ret.push(book)
     })
     this.sort(ret)
@@ -78,7 +78,7 @@ export class MainserviceService{
     var ret: Book[]
     ret = []
     this.allBooks.forEach(book=>{
-      if(book.Title.match(RegExp('^'+value)))
+      if(book.Title.match(RegExp('^'+value,'i')))
         ret.push(book)
     })
     this.sort(ret)

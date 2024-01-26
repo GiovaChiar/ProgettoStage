@@ -8,93 +8,115 @@ import { BookToAdd } from '../../classes/booktoAdd';
 @Injectable({
   providedIn: 'root'
 })
-export class AdiminService{
-  private book = new BookToAdd('', '', '', '', '','','',0)
+export class AdiminService {
+  private book = new BookToAdd('', '', '', '', '', '', '', 0)
   private delBook = ''
   private delUser = ''
   private users !: Info[]
-  constructor(){}
+  private books !: Book[]
+  
+  constructor() { }
 
-  setTitle(value: string){
+  setTitle(value: string) {
     this.book.Title = value
   }
-  setSurname(value: string){
+  setSurname(value: string) {
     this.book.SurnameWriter = value
   }
-  setName(value: string){
+  setName(value: string) {
     this.book.NameWriter = value
   }
-  setIsbn(value: string){
+  setIsbn(value: string) {
     this.book.ISBN = value
   }
-  setGenre(value: string){
+  setGenre(value: string) {
     this.book.Type = value
   }
-  setState(value: string){
+  setState(value: string) {
     this.book.LocationInLibrary = value
   }
-  setPosition(value: string){
+  setPosition(value: string) {
     this.book.LocationInLibrary = value
   }
-  setLanguage(value: string){
+  setLanguage(value: string) {
     this.book.Language = value
   }
-  setCopies(value: string){
-  this.book.NumberOfCopies = parseInt(value)
+  setCopies(value: string) {
+    this.book.NumberOfCopies = parseInt(value)
     console.log(this.book.NumberOfCopies)
-}
+  }
 
-  setIsbnRem(value: string){
+  setIsbnRem(value: string) {
     this.delBook = value
   }
-  setUsers(value: Info[]){
+  setUsers(value: Info[]) {
     this.users = value
   }
-  getDelBook(){
+  setBooks(value: Book[]) {
+    this.books = value
+  }
+  getDelBook() {
     return this.delBook
   }
-  getBook(){
+  getBook() {
     return this.book
   }
-  getDelUser(){
+  getDelUser() {
     return this.delUser
   }
-  getUsers(){
+  getUsers() {
     return this.users
   }
-  addBook(){
+  addBook() {
     var i = 1
-    if(this.book.ISBN==='')
-      i = i*2
-    if(this.book.Title==='')
-      i = i*3
-    if(this.book.SurnameWriter==='')
-      i = i*5
-    if(this.book.Language==='')
-      i = i*7
-    if(this.book.LocationInLibrary==='')
-      i = i*11
-    if(this.book.NumberOfCopies===0)
-      i = i*13
-    if(this.book.Type==='')
-      i = i*17
-    if(this.book.NameWriter==='')
-      i = i*19
+    if (this.book.ISBN === '') {
+      i = i * 2
+    }
+    if (this.book.Title === '') {
+      i = i * 3
+    }
+    if (this.book.SurnameWriter === '') {
+      i = i * 5
+    }
+    if (this.book.Language === '') {
+      i = i * 7
+    }
+    if (this.book.LocationInLibrary === '') {
+      i = i * 11
+    }
+    if (this.book.NumberOfCopies === 0) {
+      i = i * 13
+    }
+    if (this.book.Type === '') {
+      i = i * 17
+    }
+    if (this.book.NameWriter === '') {
+      i = i * 19
+    }
     return i
   }
-  removeBook(){
-    if(this.delBook===''){
+  removeBook() {
+    if (this.delBook === '') {
       return 0
-    }else{
+    } else {
       return 1
     }
   }
-  searchUser(value: String){
+  searchUser(value: string) {
     var ret: Info[]
     ret = []
-    this.users.forEach(user=>{
-      if(user.Username.match(RegExp('^'+value)))
+    this.users.forEach(user => {
+      if (user.Username.match(RegExp('^' + value)))
         ret.push(user)
+    })
+    return ret
+  }
+  searchBook(value: string) {
+    var ret: Book[]
+    ret = []
+    this.books.forEach(book => {
+      if (book.Title.match(RegExp('^' + value,'i')))
+        ret.push(book)
     })
     return ret
   }

@@ -92,6 +92,7 @@ export class LoginComponent implements OnDestroy{
         })
         break
         case 5:
+          localStorage.setItem('admin','admin')
           this.route.navigate(['admin'])
           break
     }

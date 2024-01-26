@@ -35,6 +35,16 @@ export class AppComponent implements OnInit{
     }else
       return false
   }
+  public adminLogged(){
+    if (typeof localStorage !== 'undefined'){
+      const ver = localStorage.getItem('admin');
+      if(!ver)
+        return false
+      else
+        return true
+    }else
+      return false
+  }
   public open(modal: any): void {
     this.modalService.open(modal);
   }

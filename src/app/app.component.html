@@ -10,6 +10,9 @@
         <div class="">
           <button class="btn bg-blue nav-link catalogue-text" routerLink="/catalogue">CATALOGUE</button>
         </div>
+        <div class="border-start" *ngIf="adminLogged()" >
+          <button class="btn bg-blue nav-link catalogue-text" routerLink="/admin">ADMIN</button>
+        </div>
         <div class="border-start position-absolute end-0" *ngIf="isLoggedIn()">
           <button class="btn bg-blue nav-link login-text" routerLink="/account">ACCOUNT</button>
         </div>

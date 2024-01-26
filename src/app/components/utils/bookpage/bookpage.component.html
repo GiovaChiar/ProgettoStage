@@ -15,11 +15,11 @@
                         <div *ngIf="getLogin(); then thenBlock else elseBlock"></div>
                         <ng-template #thenBlock>
                             <div class="d-flex flex-wrap justify-content-center">
-                                <div class="d-flex border-dark border-end">
-                                    <button class="btn bg-transparent" (click)="rentBook()">RENT</button>
+                                <div class="d-flex border-dark border-end" >
+                                    <button class="btn bg-transparent" (click)="rentBook()" [disabled]="libraryOrCat()">RENT</button>
                                 </div>
                                 <div class="d-flex border-dark border-start">
-                                    <button class="btn bg-transparent" (click)="giveBackBook()">GIVE BACK</button>
+                                    <button class="btn bg-transparent" (click)="giveBackBook()"  [disabled]="!libraryOrCat()">GIVE BACK</button>
                                 </div>
                             </div>
                         </ng-template>

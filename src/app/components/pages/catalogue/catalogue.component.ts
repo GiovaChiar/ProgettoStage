@@ -34,7 +34,7 @@ export class CatalogueComponent implements OnInit, OnDestroy{
         var tmp = JSON.parse(JSON.stringify(response))
         console.log(tmp)
         tmp.forEach((el: { ISBN: string; Title: string; NameWriter: string; SurnameWriter: string; Type: string; LocationInLibrary: string; Language: string;NumberOfCopies: number;createdAt: Date;})=>{
-          this.books.push(new Book(el.ISBN,el.Title,el.NameWriter,el.SurnameWriter,el.Type,el.LocationInLibrary,el.Language,el.NumberOfCopies,el.createdAt))
+          this.books.push(new Book(el.ISBN,el.Title,el.NameWriter,el.SurnameWriter,el.Type,el.LocationInLibrary,el.Language,el.NumberOfCopies,undefined))
         })
         this.mainService.setAllBooks(this.books)
       })

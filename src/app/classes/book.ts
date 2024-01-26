@@ -9,6 +9,6 @@ export class Book {
         public LocationInLibrary: string,
         public Language: string,
         public NumberOfCopies: number,
-        public createdAt: Date
+        public createdAt: Date | undefined
         ) {}
   }
