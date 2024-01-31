@@ -136,9 +136,9 @@ const cambioPassword = async (req, res) => {
 const getAllUser = async (req, res) => {
     const Role = req.params.Role;
     try {
-    if (Role === "ADMIN") {
+    if (Role === "ADMIN") { 
          const users = await User.findAll({
-         attributes: ['Username', 'Email']
+         attributes: ['idUser','Username','Email']
     });
         res.status(200).json(users);
     } else {
