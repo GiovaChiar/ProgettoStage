@@ -133,12 +133,22 @@ const cambioPassword = async (req, res) => {
 
 
 // get di tutti gli utenti
-const getAllUser= async (req,res)=> {
-    const user= await  User.findAll({
-
-    })
-    res.status(200).send(user)
-}
+const getAllUser = async (req, res) => {
+    const Role = req.params.Role;
+    try {
+    if (Role === "ADMIN") {
+         const users = await User.findAll({
+         attributes: ['Username', 'Email']
+    });
+        res.status(200).json(users);
+    } else {
+        throw new Error("Role not authorized");
+    }
+    }  
+    catch (error) {
+        res.status(400).json(error.message);
+    }
+    }
 
 
 module.exports= {
