@@ -9,7 +9,7 @@ const router= require('express').Router()
 router.post("/registration", UsersController.addUser)
 router.post("/login", UsersController.login)
 router.put("/changePassword", UsersController.cambioPassword)
-router.get("/UserList", UsersController.getAllUser)
+router.get("/UserList/:Role", UsersController.getAllUser)
 router.delete("/deleteUser/:idUser", UsersController.deleteUser)
 
 // Route for books
