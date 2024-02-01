@@ -50,17 +50,27 @@ export class AdminComponent implements  OnInit,OnDestroy{
   }
 
   private getAllUser(){
-    this.users = this.adminService.getUsers();
+     this.users = this.adminService.getUsers();
     this.users =[]
-    this.sub = this.http.get('http://localhost:23456/UserList').subscribe(response=>{
+    this.sub = this.http.get('http://localhost:23456/UserList/ADMIN').subscribe(response=>{
       var tmp = JSON.parse(JSON.stringify(response))
-      tmp.forEach((el: {idUser: string, Username: string, NameUser: string, SurnameUser: string, Email: string})=>{
-        this.users.push(new Info(el.idUser,el.Username,el.Email,el.NameUser,el.SurnameUser,))
+      tmp.forEach((el: {idUser: string, Username: string, NameUser: string, SurnameUser: string, Email: string, Role: string})=>{
+        this.sub = this.http.get('http://localhost:23456/LoanList/'+el.idUser).subscribe(response=>{
+          var booksUser: Book[] = []
+          var tmp = JSON.parse(JSON.stringify(response))
+          console.log(tmp.toString())
+          if(tmp instanceof Object)
+          tmp.forEach((el: { BookISBN: string; Book: {Title: string; NameWriter: string; SurnameWriter: string; Type: string; LocationInLibrary: string; Language: string;NumberOfCopies: number;};createdAt:Date})=>{
+            booksUser.push(new Book(el.BookISBN,el.Book.Title,el.Book.NameWriter,el.Book.SurnameWriter,el.Book.Type,el.Book.LocationInLibrary,el.Book.Language,el.Book.NumberOfCopies, el.createdAt))
+          })
+          var userCurr = new Info(el.idUser,el.Username,el.Email,el.NameUser,el.SurnameUser)
+          userCurr.setBooks(booksUser)
+          this.users.push(userCurr)
+        })
       })
       this.adminService.setUsers(this.users)
     })
   }
-
   ngOnInit(): void {
     this.getAllUser()
     this.getAllBook()

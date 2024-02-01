@@ -34,7 +34,7 @@ export class RegistrationComponent implements OnDestroy {
   pw='password'
   wrongPassword = false
   messagePassword = ''
-
+  
   pwconfirm='confirm password'
   wrongPwconfirm = false
   messagePwconfirm = 'passwords do not match'

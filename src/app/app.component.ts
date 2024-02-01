@@ -35,16 +35,20 @@ export class AppComponent implements OnInit{
     }else
       return false
   }
+
   public adminLogged(){
-    if (typeof localStorage !== 'undefined'){
-      const ver = localStorage.getItem('admin');
-      if(!ver)
-        return false
-      else
-        return true
-    }else
+    if(this.isLoggedIn()){
+       const ver = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem('info'))))
+    if(ver.Role==="ADMIN"){
+      return true
+    }else{
       return false
-  }
+    }
+    }else{
+     return false
+    }
+    }
+
   public open(modal: any): void {
     this.modalService.open(modal);
   }

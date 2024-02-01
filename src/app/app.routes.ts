@@ -10,10 +10,11 @@ import { AdminComponent } from './components/pages/admin/admin.component';
 
 export const routes: Routes = [
     {path: "login", component: LoginComponent,},
-    {path: "admin", component: AdminComponent},
     {path: "registration-page", component: RegistrationComponent},
     {path: "account", canActivate: [authGuard], component: AccountComponent},
     {path: "catalogue", component: CatalogueComponent, children: [{path: ":id", component: BookpageComponent}]},
+    {​​​​​​path: "admin", canActivate: [authGuard], component: AdminComponent}​​​​​​,
     {path: "library", canActivate: [authGuard],component: LibraryComponent, children:[{path: ":id", component: BookpageComponent}], }
+
 ];
 

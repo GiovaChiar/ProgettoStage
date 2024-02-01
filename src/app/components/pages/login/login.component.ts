@@ -77,24 +77,24 @@ export class LoginComponent implements OnDestroy{
         const user = this.autService.getUser()
         console.log(user)
         this.sub = this.http.post('http://localhost:23456/login', user).subscribe(response => {
-          console.log(JSON.stringify(response))
-          var tmp = JSON.parse(JSON.stringify(response))
-          if(tmp instanceof Object){
+            console.log(JSON.stringify(response))
+            var tmp = JSON.parse(JSON.stringify(response))
+            console.log(tmp)
+        if(tmp instanceof Object){
             localStorage.setItem('user',JSON.stringify(tmp.idUser))
             localStorage.setItem('info',JSON.stringify(tmp))
+        if(tmp.Role==='ADMIN')
+            this.route.navigate(['admin'])
+        else
             this.route.navigate(['library'])
-          }else{
-            this.wrongPassword = true;
-            this.wrongUsername = true;
-            this.messageUsername = "wrong credentials"
-            this.messagePassword = "wrong credentials"
+        }else{
+          this.wrongPassword = true;
+          this.wrongUsername = true;
+          this.messageUsername = "wrong credentials"
+          this.messagePassword = "wrong credentials"
           }
         })
         break
-        case 5:
-          localStorage.setItem('admin','admin')
-          this.route.navigate(['admin'])
-          break
     }
   }
 
