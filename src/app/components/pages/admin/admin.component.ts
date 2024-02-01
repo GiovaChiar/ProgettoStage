@@ -57,7 +57,7 @@ export class AdminComponent implements  OnInit,OnDestroy{
       tmp.forEach((el: {idUser: string, Username: string, NameUser: string, SurnameUser: string, Email: string, Role: string})=>{
         this.sub = this.http.get('http://localhost:23456/LoanList/'+el.idUser).subscribe(response=>{
           var booksUser: Book[] = []
-          var tmp = JSON.parse(JSON.stringify(response))
+          var tmp = JSON.parse(JSON.stringify(response)) 
           console.log(tmp.toString())
           if(tmp instanceof Object)
           tmp.forEach((el: { BookISBN: string; Book: {Title: string; NameWriter: string; SurnameWriter: string; Type: string; LocationInLibrary: string; Language: string;NumberOfCopies: number;};createdAt:Date})=>{
