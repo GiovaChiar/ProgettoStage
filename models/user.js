@@ -35,7 +35,11 @@ module.exports= (sequelize, DataTypes) => {
         SurnameUser: {
             type: DataTypes.STRING,
             allowNull: false, 
-        }
+        },
+         Role:{
+            type: DataTypes.STRING,
+            allowNull: false, 
+        },
     })
     Users.findByPk = async function (idUser) {
         return this.findOne({ where: { idUser: idUser } });

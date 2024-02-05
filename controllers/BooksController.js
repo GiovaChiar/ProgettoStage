@@ -24,12 +24,18 @@ const addBook = async (req, res) => {
     if (info.ISBN.length !== 13) {
       return res.status(400).json({message:"The ISBN code is mandatory and must contain 13 characters."});
     }
-  
+
+    //viene cercato un libro con lo stesso ISBN nel database utilizzando Books.findOne(). Se viene trovato un libro corrispondente e il titolo nel database è diverso da quello fornito, viene restituito un messaggio di errore specificando che il libro è già presente nel database con un diverso ISBN  
+    const existingBook = await Books.findOne({ where: { ISBN: info.ISBN } });
+    if (existingBook && existingBook.Title !== info.Title) {
+      return res.status(400).json({ message: "This book is associated with another Title" });
+    }
+    
     // Controlla se l'ISBN è già presente
     const countISBN = await Books.count({ where: { ISBN: info.ISBN } });
 
     if (countISBN > 0) {
-      // Incrementa il numero di copie del libro esistente
+      // Incrementa il numero di copie del libro esistente  
       await Books.increment('NumberOfCopies', { where: { ISBN: info.ISBN } });
       return res.status(200).json({message:"Book updated!"});
     }

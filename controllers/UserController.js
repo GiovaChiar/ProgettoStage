@@ -50,7 +50,8 @@ const addUser = async (req, res) => {
             Email: req.body.Email,
             Password: hashedPassword,
             NameUser: req.body.NameUser,
-            SurnameUser: req.body.SurnameUser,
+            SurnameUser: req.body.SurnameUser, 
+            Role: "USER"
         };
         
         const user = await User.create(info);
@@ -89,8 +90,7 @@ const addUser = async (req, res) => {
             if (!isPasswordValid) {
             throw new Error("Invalid credentials");
         }
-            const token = generateToken(user);
-            res.json({ message: "Login successful", idUser: user.idUser, token });
+            res.json({ message: "Login successful", idUser: user.idUser, Role: user.Role });
         } catch (error) {
              res.status(401).send(error.message);
         }

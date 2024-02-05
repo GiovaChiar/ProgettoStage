@@ -53,7 +53,7 @@ const getLoan = async (req, res) => {
         }]
     });
 
-    if (loans.length === 0) {
+    if (loans.length === "") {
       res.status(404).json({ error: 'No loans found for this user' });
       return;
     }
