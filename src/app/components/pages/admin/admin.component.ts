@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { AdiminService } from '../../../services/admin/adimin.service';
 import { InputTileComponent } from "../../utils/input-tile/input-tile.component";
 import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
-import { Subscription, combineLatest } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { Subscription, catchError, combineLatest } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { OnReadOpts } from 'net';
 import { Info } from '../../../classes/info';
 import Swal from 'sweetalert2'; // Importa la libreria SweetAlert
 import { Book } from '../../../classes/book';
+import { response } from 'express';
 
 @Component({
     selector: 'app-admin',
@@ -124,11 +125,19 @@ export class AdminComponent implements  OnInit,OnDestroy{
   addBook(){
     var val = this.adminService.addBook()
     if( val === 1){
-      this.sub = this.http.post('http://localhost:23456/registrationBook',this.adminService.getBook()).subscribe(response => {
-        var tmp = JSON.parse(JSON.stringify(response))
-        console.log(tmp.toString())
-        alert('Il libro è stato registrato!');
-      })
+   
+        this.http.post('http://localhost:23456/registrationBook',this.adminService.getBook())
+        .pipe(catchError(
+         (err,response) => {
+          var tmp = JSON.stringify(response)
+          alert('Errore nella registrazione del libro')
+          return tmp
+        }
+          ))
+         .subscribe(response => {
+           var tmp = JSON.parse(JSON.parse(JSON.stringify(response)))
+           alert(tmp.message)
+         })
       setTimeout(() => {
         this.getAllBook()
       }, 1000);
