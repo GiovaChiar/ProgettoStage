@@ -22,7 +22,7 @@ const addBook = async (req, res) => {
   
     // Verifica se la lunghezza dell'ISBN è 13
     if (info.ISBN.length !== 13) {
-      return res.status(400).json({message:"The ISBN code is mandatory and must contain 13 characters."});
+      return res.status(200).json({message:"The ISBN code is mandatory and must contain 13 characters."});
     }
 
     //viene cercato un libro con lo stesso ISBN nel database utilizzando Books.findOne(). Se viene trovato un libro corrispondente e il titolo nel database è diverso da quello fornito, viene restituito un messaggio di errore specificando che il libro è già presente nel database con un diverso ISBN  

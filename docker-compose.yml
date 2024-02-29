@@ -1,0 +1,43 @@
+version: "3"
+networks:
+  my-network:
+    driver: bridge
+
+services:
+
+  db: 
+    image: mariadb:latest
+    networks:
+      - my-network
+    container_name: mariadb
+    environment: 
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: libreria
+      MARIADB_PASSWORD: root
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  backend:
+    build: .
+    networks:
+      - my-network
+    container_name: backend
+    ports:
+      - 8080:8080
+    depends_on: 
+      db:
+        condition: service_healthy
+
+
+  frontend:
+    image: frontend4.2
+    ports:
+      - 4200:4200
+    networks:
+      - my-network
