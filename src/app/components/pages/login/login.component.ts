@@ -76,7 +76,7 @@ export class LoginComponent implements OnDestroy{
       case 4:
         const user = this.autService.getUser()
         console.log(user)
-        this.sub = this.http.post('http://localhost:23456/login', user).subscribe(response => {
+        this.sub = this.http.post('http://backend:8080/login', user).subscribe(response => {
             console.log(JSON.stringify(response))
             var tmp = JSON.parse(JSON.stringify(response))
             console.log(tmp)

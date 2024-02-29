@@ -112,7 +112,7 @@ export class RegistrationComponent implements OnDestroy {
     var val = this.regService.tryRegister()
     if(val===1){
       console.log(this.regService.getUser())
-      this.sub = this.http.post('http://localhost:23456/registration', this.regService.getUser()).subscribe(response => {
+      this.sub = this.http.post('http://backend:8080/registration', this.regService.getUser()).subscribe(response => {
         var wrong = false
         console.log(JSON.stringify(response))
         var tmp = JSON.parse(JSON.stringify(response))

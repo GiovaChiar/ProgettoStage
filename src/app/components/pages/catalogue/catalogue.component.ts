@@ -30,7 +30,7 @@ export class CatalogueComponent implements OnInit, OnDestroy{
     this.books = this.mainService.getAllBooks(); 
     if(this.books === undefined){
       this.books =[] 
-      this.sub = this.http.get('http://localhost:23456/BookList').subscribe(response=>{
+      this.sub = this.http.get('http://backend:8080/BookList').subscribe(response=>{
         var tmp = JSON.parse(JSON.stringify(response))
         console.log(tmp)
         tmp.forEach((el: { ISBN: string; Title: string; NameWriter: string; SurnameWriter: string; Type: string; LocationInLibrary: string; Language: string;NumberOfCopies: number;createdAt: Date;})=>{
