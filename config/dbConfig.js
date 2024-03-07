@@ -1,5 +1,5 @@
 module.exports= {
-    HOST: 'localhost',
+    HOST: 'mariadb',
     PORT: '3306',
     USER: 'root',
     PASSWORD: 'root',
