@@ -40,7 +40,7 @@ export class AdminComponent implements  OnInit,OnDestroy{
 
   private getAllBook(){
     this.books = []
-     this.sub = this.http.get('http://localhost:8080/BookList').subscribe(response=>{
+     this.sub = this.http.get('/BookList').subscribe(response=>{
        var tmp = JSON.parse(JSON.stringify(response))
        console.log(tmp)
        tmp.forEach((el: { ISBN: string; Title: string; NameWriter: string; SurnameWriter: string; Type: string; LocationInLibrary: string; Language: string;NumberOfCopies: number;createdAt: Date;})=>{
@@ -53,10 +53,10 @@ export class AdminComponent implements  OnInit,OnDestroy{
   private getAllUser(){
      this.users = this.adminService.getUsers();
     this.users =[]
-    this.sub = this.http.get('http://localhost:8080/UserList/ADMIN').subscribe(response=>{
+    this.sub = this.http.get('/UserList/ADMIN').subscribe(response=>{
       var tmp = JSON.parse(JSON.stringify(response))
       tmp.forEach((el: {idUser: string, Username: string, NameUser: string, SurnameUser: string, Email: string, Role: string})=>{
-        this.sub = this.http.get('http://localhost:8080/LoanList/'+el.idUser).subscribe(response=>{
+        this.sub = this.http.get('/LoanList/'+el.idUser).subscribe(response=>{
           var booksUser: Book[] = []
           var tmp = JSON.parse(JSON.stringify(response)) 
           console.log(tmp.toString())
@@ -126,7 +126,7 @@ export class AdminComponent implements  OnInit,OnDestroy{
     var val = this.adminService.addBook()
     if( val === 1){
    
-        this.http.post('http://backend:8080/registrationBook',this.adminService.getBook())
+        this.http.post('/registrationBook',this.adminService.getBook())
         .pipe(catchError(
          (err,response) => {
           var tmp = JSON.stringify(response)
@@ -188,7 +188,7 @@ export class AdminComponent implements  OnInit,OnDestroy{
         break
       case 1:
         console.log(this.adminService.getDelBook())
-        this.sub = this.http.delete('http://backend:8080/deleteBook/'+this.adminService.getDelBook()).subscribe(response => {
+        this.sub = this.http.delete('/deleteBook/'+this.adminService.getDelBook()).subscribe(response => {
           var tmp = JSON.parse(JSON.stringify(response))
           console.log(tmp)
         })
@@ -203,7 +203,7 @@ export class AdminComponent implements  OnInit,OnDestroy{
   }
   removeUser(value: string){
     console.log(value)
-    this.sub = this.http.delete('http://backend:8080/deleteUser/'+value).subscribe(
+    this.sub = this.http.delete('/deleteUser/'+value).subscribe(
       response => {
         var tmp = JSON.parse(JSON.stringify(response))
         console.log(tmp)
@@ -215,7 +215,7 @@ export class AdminComponent implements  OnInit,OnDestroy{
   }
 
   removeBookClick(value: string){
-    this.sub = this.http.delete('http://backend:8080/deleteBook/'+value).subscribe(response => {
+    this.sub = this.http.delete('/deleteBook/'+value).subscribe(response => {
         var tmp = JSON.parse(JSON.stringify(response))
         console.log(tmp)
       })

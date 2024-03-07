@@ -77,7 +77,7 @@ export class AccountComponent implements OnDestroy, OnInit {
           idUser: ver,
           Password: this.accountService.getPassword()
         }
-        this.sub = this.http.put('http://backend:8080/changePassword',val).subscribe(response => {
+        this.sub = this.http.put('/changePassword',val).subscribe(response => {
           var tmp = JSON.parse(JSON.stringify(response))
           console.log(tmp.toString())
         }) 

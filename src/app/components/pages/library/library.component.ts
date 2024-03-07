@@ -34,7 +34,7 @@ export class LibraryComponent implements OnInit, OnDestroy{
         userIdUser: JSON.parse(JSON.stringify(localStorage.getItem('user')))
       }
       console.log(userIdUser)
-      this.http.get('http://backend:8080/LoanList/'+userIdUser.userIdUser).subscribe(response=>{
+      this.http.get('/LoanList/'+userIdUser.userIdUser).subscribe(response=>{
           console.log(response)
           var tmp = JSON.parse(JSON.stringify(response))
           tmp.forEach((el: { BookISBN: string; Book: {Title: string; NameWriter: string; SurnameWriter: string; Type: string; LocationInLibrary: string; Language: string;NumberOfCopies: number;};createdAt:Date})=>{

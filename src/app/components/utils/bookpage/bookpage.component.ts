@@ -62,13 +62,13 @@ export class BookpageComponent implements OnInit,OnDestroy{
   }
 
   rentBook(){
-    this.subhttp = this.http.post('http://backend:8080/addLoan',this.mainservice.rentBook(this.book.ISBN)).subscribe(response=>{
+    this.subhttp = this.http.post('/addLoan',this.mainservice.rentBook(this.book.ISBN)).subscribe(response=>{
       var tmp = JSON.parse(JSON.stringify(response))
       console.log(tmp)})
   }
   giveBackBook(){
     const c = this.mainservice.giveBack(this.book.ISBN)
-    this.subhttp = this.http.delete('http://backend:8080/deleteLoan/'+c.BookISBN+'/'+c.userIdUser).subscribe(response=>{
+    this.subhttp = this.http.delete('/deleteLoan/'+c.BookISBN+'/'+c.userIdUser).subscribe(response=>{
       var tmp = JSON.parse(JSON.stringify(response))
       console.log(tmp)})
       window.location.reload();

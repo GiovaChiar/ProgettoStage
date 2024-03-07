@@ -1,4 +1,4 @@
-FROM node:20-alpine3.18 as build
+FROM node:20-alpine as build
 #non usare alpine
 RUN apk add python3
 WORKDIR /usr/src/app

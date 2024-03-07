@@ -1,0 +1,57 @@
+{
+    "/login": {
+      "target": "http://backend:8080",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/registration":{
+      "target": "http://backend:8080",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/BookList":{
+      "target": "http://backend:8080",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/LoanList/":{
+      "target": "http://backend:8080",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/addLoan":{
+      "target": "http://backend:8080",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/deleteLoan/":{
+      "target": "http://backend:8080",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/UserList/ADMIN":{
+      "target": "http://backend:8080",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/registrationBook":{
+      "target": "http://backend:8080",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/deleteUser":{
+      "target": "http://backend:8080",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/deleteBook":{
+      "target": "http://backend:8080",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/changePassword":{
+      "target": "http://backend:8080",
+      "secure": false,
+      "changeOrigin": true
+    }
+}
