@@ -12,6 +12,7 @@
     "src/main.ts",
     "src/main.server.ts",
     "server.ts"
+    //dadsasdad
   ],
   "include": [
     "src/**/*.d.ts"
